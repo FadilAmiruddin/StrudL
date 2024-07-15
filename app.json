@@ -15,7 +15,8 @@
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
-      }
+      },
+      "bundleIdentifier": "com.anonymous.StrudL"
     },
     "android": {
       "adaptiveIcon": {

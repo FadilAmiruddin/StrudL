@@ -1,154 +1,139 @@
-import React, { useState } from 'react';
-import { TextInput, FlatList, StyleSheet, Text, View, Button, Dimensions, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useRef, useState, useEffect } from 'react';
+import { Text, View, Button, SafeAreaView, Linking, Platform } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export default function App() {
-  const [showMap, setShowMap] = useState(false); // State variable to toggle map visibility
-  const { width, height } = Dimensions.get('window'); // Get the width and height of the device screen
-  const [items, setItems] = useState([]); // State variable to store the list items
-  const [input, setInput] = useState(''); // State variable to store the input value
+import styles from './HelperJsFiles/styles';
+import useLocation from './HelperJsFiles/locationPerms';
+import landmark_locations from './HelperJsonFiles/landmark_locations.json';
+import ShroudContainer from './HelperJsFiles/shroud';
+import HomeScreen from './screens/HomeScreen';
+import DistrictCompletionScreen from './screens/DistrictCompletionScreen';
+import CityCompletionScreen from './screens/CityCompletionScreen';
+import QuestScreen from './screens/QuestScreen';  // Assume this screen is created
+import { registerRootComponent } from 'expo';
 
-  // Function to add item to the list
-  const addItem = () => {
-    if (input.trim()) {
-      setItems([...items, input.trim()]); // Add the trimmed input value to the items array
-      setInput(''); // Clear the input field
+registerRootComponent(DistrictCompletionScreen);
+
+const Tab = createBottomTabNavigator();
+const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
+
+function MapScreen() {
+  const [directions, setDirectionsState] = useState(null);
+  const myLocation = useLocation();
+  const shroudContainerRef = useRef(null);
+
+  const updateDirections = (origin, destination) => {
+    if (origin.latitude && origin.longitude) {
+      setDirectionsState({
+        origin: { latitude: origin.latitude, longitude: origin.longitude },
+        destination: { latitude: destination.latitude, longitude: destination.longitude },
+      });
     }
   };
 
-  // Function to clear the list
-  const clearList = () => {
-    setItems([]); // Clear the items array
+  useEffect(() => {
+    if (myLocation.latitude && myLocation.longitude) {
+      updateDirections(myLocation, { latitude: 48.2081743, longitude: 16.3738189 }); // Default to St. Stephen's Cathedral, Vienna
+    }
+  }, [myLocation]);
+
+  const handleMarkerPress = (location) => {
+    if (myLocation.latitude && myLocation.longitude) {
+      updateDirections(myLocation, { latitude: location.latitude, longitude: location.longitude });
+    } else {
+      console.error('Current location is not available');
+    }
+  };
+
+  const openDirections = (destination) => {
+    if (Platform.OS === 'ios') {
+      const url = `http://maps.apple.com/?saddr=${myLocation.latitude},${myLocation.longitude}&daddr=${destination.latitude},${destination.longitude}`;
+      Linking.openURL(url);
+    } else {
+      Linking.openURL(`google.navigation:q=${destination.latitude},${destination.longitude}`);
+      console.log("Button pressed");
+    }
   };
 
   return (
-    <View style={styles.container}>
-      {showMap ? (
-        <>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: 48.2082,
-              longitude: 16.3738,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
+    <SafeAreaView style={styles.container}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: myLocation.latitude || 48.2081743,
+          longitude: myLocation.longitude || 16.3738189,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        {myLocation.latitude && myLocation.longitude && (
+          <Marker
+            coordinate={{ latitude: myLocation.latitude, longitude: myLocation.longitude }}
+            title="My Location"
+            description="Current Location"
+            pinColor="blue"
           >
-            <Marker
-              coordinate={{ latitude: 48.2082, longitude: 16.3738 }}
-              title="Vienna"
-              description="Vienna, Austria"
-            />
-          </MapView>
-          <View style={[styles.circle, { top: height / 2 - 50, left: width / 2 - 50 }]} />
-          <TouchableOpacity style={styles.backButton} onPress={() => setShowMap(false)}>
-            <Text style={styles.backButtonText}>Go Back</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          {/* Clear List Button in the top left corner */}
-          <TouchableOpacity style={styles.clearListButton} onPress={clearList}>
-            <Text style={styles.clearListButtonText}>Clear List</Text>
-          </TouchableOpacity>
-          <View style={styles.listContainer}>
-            <Text style={styles.headerText}>
-              Type user to add them to leaderboard. Press Show Map to see the map of Vienna.
-            </Text>
-            <TextInput
-              style={styles.input}
-              value={input}
-              onChangeText={setInput}
-              placeholder="Enter item"
-            />
-            <Button
-              onPress={addItem}
-              title="Add Item"
-            />
-            <FlatList
-              data={items}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
-            />
-          </View>
-          {/* Show Map Button in the top right corner */}
-          <TouchableOpacity style={styles.showMapButton} onPress={() => setShowMap(true)}>
-            <Text style={styles.showMapButtonText}>Show Map</Text>
-          </TouchableOpacity>
-        </>
-      )}
+            <Callout>
+              <View>
+                <Text>My Location</Text>
+                <Text>Current Location</Text>
+              </View>
+            </Callout>
+          </Marker>
+        )}
+        {landmark_locations.map((location, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+            title={location.title}
+            description={location.description}
+            pinColor="red"
+            onPress={() => handleMarkerPress(location)}
+          >
+            <Callout>
+              <View style={styles.calloutContainer}>
+                <Text style={styles.calloutTitle}>{location.title}</Text>
+                <Text style={styles.calloutDescription}>{location.description}</Text>
+                <Button 
+                  title="Directions" 
+                  onPress={() => openDirections(location)}
+                  style={styles.calloutButton}
+                />
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+        {directions && (
+          <MapViewDirections
+            origin={directions.origin}
+            destination={directions.destination}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={3}
+            strokeColor="hotpink"
+            onError={(errorMessage) => console.log('MapViewDirections Error:', errorMessage)}
+          />
+        )}
+        <ShroudContainer ref={shroudContainerRef} />
+      </MapView>
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center', // Center elements vertically
-  },
-  listContainer: {
-    alignItems: 'center', // Center elements horizontally
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject, // Fill the entire container
-  },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    backgroundColor: 'rgba(0,0,0,0.6)', // Semi-transparent background
-    padding: 10,
-    borderRadius: 5,
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  showMapButton: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    backgroundColor: 'rgba(0,0,0,0.6)', // Semi-transparent background
-    padding: 10,
-    borderRadius: 5,
-  },
-  showMapButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  clearListButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    backgroundColor: 'rgba(0,0,0,0.6)', // Semi-transparent background
-    padding: 10,
-    borderRadius: 5,
-  },
-  clearListButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  headerText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    width: '80%', // Make the input field take 80% of the container width
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen name="District Completion Rate" component={DistrictCompletionScreen} />
+        <Tab.Screen name="City Completion Rate" component={CityCompletionScreen} />
+        <Tab.Screen name="Quest" component={QuestScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
