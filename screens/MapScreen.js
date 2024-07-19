@@ -91,6 +91,7 @@ export function MapScreen() {
           longitudeDelta: 0.0421,
         }}
         onRegionChangeComplete={handleRegionChangeComplete}
+        ref={mapViewRef}
       >
         {myLocation.latitude && myLocation.longitude && (
           <Marker
