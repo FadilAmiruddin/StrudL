@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Text, View, Button, SafeAreaView, Linking, Platform } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import React, { useRef, createRef, useReducer, useState, forwardRef, useImperativeHandle } from 'react';
+import { SafeAreaView, Linking, Platform, TextInput, FlatList, StyleSheet, Text, View, Button, Dimensions, TouchableOpacity } from 'react-native';
+import MapView, { Marker, Polygon, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,6 +25,7 @@ function MapScreen() {
   const [directions, setDirectionsState] = useState(null);
   const myLocation = useLocation();
   const shroudContainerRef = useRef(null);
+  const mapViewRef = useRef(null);
 
   const updateDirections = (origin, destination) => {
     if (origin.latitude && origin.longitude) {
@@ -59,16 +60,47 @@ function MapScreen() {
     }
   };
 
+  const handleRegionChangeComplete = (newRegion) => {
+    if (!isViennaInView(newRegion)) {
+      resetToVienna();
+    }
+  };
+
+  const isViennaInView = (region) => {
+    const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
+    const viennaLatitude = 48.2081743;
+    const viennaLongitude = 16.3738189;
+
+    return (
+      latitude - latitudeDelta / 2 <= viennaLatitude &&
+      latitude + latitudeDelta / 2 >= viennaLatitude &&
+      longitude - longitudeDelta / 2 <= viennaLongitude &&
+      longitude + longitudeDelta / 2 >= viennaLongitude
+    );
+  };
+
+  const resetToVienna = () => {
+    const initialViennaRegion = {
+      latitude: myLocation.latitude || 48.2081743,
+      longitude: myLocation.longitude || 16.3738189,
+      latitudeDelta: 0.2922,
+      longitudeDelta: 0.2921,
+    };
+    mapViewRef.current.animateToRegion(initialViennaRegion, 1000);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <MapView
+        ref={mapViewRef}
         style={styles.map}
         initialRegion={{
-          latitude: myLocation.latitude || 48.2081743,
-          longitude: myLocation.longitude || 16.3738189,
+          latitude: 48.2081743,
+          longitude: 16.3738189,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        onRegionChangeComplete={handleRegionChangeComplete}
       >
         {myLocation.latitude && myLocation.longitude && (
           <Marker
