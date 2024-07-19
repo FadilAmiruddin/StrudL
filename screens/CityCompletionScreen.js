@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import City from '../HelperJsFiles/city.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { vienna } from '../HelperJsFiles/city.js' 
+import viennaStorage from '../HelperJsFiles/viennaStorage.js';
 
 export default function CityCompletionScreen() {
-    const [city, setCity] = useState(new City());
+    const [forceRenderValue, forceRenderFunction] = useState(0);
     const [cityCompletion, setCityCompletion] = useState(0);
 
     useEffect(() => {
         const loadCityData = async () => {
-            const newCity = new City();
-            await newCity.loadCompletedDistricts();
-            setCity(newCity);
-            setCityCompletion(newCity.calculateCompletionPercentage());
+            setCityCompletion(vienna.calculateCompletionPercentage());
         };
 
         loadCityData();
     }, []);
 
+    const forceRender = () => {
+        forceRenderFunction(forceRenderValue + 1)
+    }
+
     const resetCityData = async () => {
-        try {
-            await AsyncStorage.clear(); // Clear all AsyncStorage data
-            const newCity = new City();
-            await newCity.loadCompletedDistricts(); // Reload city data
-            setCity(newCity);
-            setCityCompletion(newCity.calculateCompletionPercentage()); // Set city completion percentage
-        } catch (error) {
-            console.error('Error clearing AsyncStorage:', error);
-        }
+        await vienna.resetCity()
+        forceRender()
     };
 
     const updateCityCompletion = async () => {
-        const newCity = new City();
-        await newCity.loadCompletedDistricts();
-        setCity(newCity);
-        setCityCompletion(newCity.calculateCompletionPercentage());
+        setCityCompletion(vienna.calculateCompletionPercentage());
+        forceRender()
+
+        console.log('')
+        console.log('')
+        console.log('')
+        console.log('')
+        await viennaStorage.async.printAllKeyValues()
     };
 
     return (

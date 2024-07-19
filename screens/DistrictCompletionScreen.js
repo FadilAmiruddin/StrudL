@@ -1,54 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import District from '../HelperJsFiles/District.js'; // Adjust path as needed
 import styles from '../HelperJsFiles/styles.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { vienna } from '../HelperJsFiles/city.js'
 
 export default function DistrictCompletionScreen() {
-    const [districts, setDistricts] = useState([]);
+    const [forceRenderValue, forceRenderFunction] = useState(0);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
-    /**
-     * Initializes the districts when the component is mounted. sets the array of districts to the state. 
-     * The districts are loaded from the HelperJsonFiles/quests.json file.
-     */
-    useEffect(() => {
-        const initializeDistricts = async () => {
-            const districtNames = [
-                'Innere Stadt', 'Leopoldstadt', 'Landstraße', 'Wieden', 'Margareten', 'Mariahilf', 
-                'Neubau', 'Josefstadt', 'Alsergrund', 'Favoriten', 'Simmering', 'Meidling', 
-                'Hietzing', 'Penzing', 'Rudolfsheim-Fünfhaus', 'Ottakring', 'Hernals', 'Währing', 
-                'Döbling', 'Brigittenau', 'Floridsdorf', 'Donaustadt', 'Liesing'
-            ];
 
-            const loadedDistricts = await Promise.all(
-                districtNames.map(async (name, index) => {
-                    const district = new District(name, index + 1, '../HelperJsonFiles/quests.json');
-                    await district.loadCompleted();
-                    return district;
-                })
-            );
+    const forceRender = () => {
+        if (forceRenderValue + 1 == Number.MAX_VALUE) {
+            forceRenderValue = 0
+        }
+        forceRenderFunction(forceRenderValue + 1)
+    }
 
-            setDistricts(loadedDistricts);
-        };
-
-        initializeDistricts();
-    }, []);
-
-    const handleButtonPress = async () => {
+    /** Callback function for marking a quest as complete */
+    const handleButtonPress = async (index) => {
         if (selectedDistrict) {
-            await selectedDistrict.loadCompleted(); // Refresh completed data
-            await selectedDistrict.increaseCompleted();
+            const indexInVienna = selectedDistrict.quests[index]
+            vienna.setQuestCompletion(indexInVienna, true)
 
-            // Create a new instance to avoid mutating state directly
-            const updatedDistrict = new District(
-                selectedDistrict.name,
-                selectedDistrict.districtNum,
-                '../HelperJsonFiles/quests.json'
-            );
-            await updatedDistrict.loadCompleted();
-
-            setSelectedDistrict(updatedDistrict); // Trigger re-render
+            forceRender()
         }
     };
     /*
@@ -56,8 +29,7 @@ export default function DistrictCompletionScreen() {
     */
     const handlePickerChange = async (itemValue, itemIndex) => {
         if (itemIndex > 0) {
-            const district = districts[itemIndex - 1];
-            await district.loadCompleted();
+            const district = vienna.districts[itemIndex - 1];
             setSelectedDistrict(district);
         } else {
             setSelectedDistrict(null);
@@ -68,37 +40,45 @@ export default function DistrictCompletionScreen() {
      * @returns the percentage of the district that has been completed based on the size of the array of quests for said district
      */
     const calculateCompletionPercentage = () => {
-        if (selectedDistrict) {
-            const completed = selectedDistrict.completed;
-            const total = selectedDistrict.quests.length;
-            return total ? (completed / total) * 100 : 0;
+        var numCompleted = 0
+        for (var q of selectedDistrict.quests) {
+            numCompleted += vienna.quests[q].getCompleted() ? 1 : 0
         }
-        return 0;
+        return (numCompleted / selectedDistrict.quests.length) * 100
     };
     /**
      * Resets all data in the app by clearing all AsyncStorage data and resetting the selected district.
      */
     const resetAllData = async () => {
         try {
-            await AsyncStorage.clear(); // Clear all AsyncStorage data
+            await vienna.resetCity()
             setSelectedDistrict(null); // Reset selected district
-            const updatedDistricts = await Promise.all(
-                districts.map(async (district) => {
-                    await district.clearData(); // Clear district specific data
-                    await district.loadCompleted(); // Refresh completed data
-                    return district;
-                })
-            );
-            setDistricts(updatedDistricts); // Update districts state
+            
         } catch (error) {
             console.error('Error clearing AsyncStorage:', error);
         }
     };
+
+    const generateDistrictPickerItems = () => {
+        return vienna.districts.map((district, index) => (
+            <Picker.Item key={index} label={district.name} value={district.districtNum} />
+        ))
+    }
+
+    const generateDistrictQuestItems = () => {
+        return selectedDistrict.quests.map((quest, questIndex) => (
+            <View key={questIndex} style={localStyles.questContainer}>
+                <Text style={localStyles.questName}>{vienna.quests[quest].questName}</Text>
+                <Text style={localStyles.questDescription}>{vienna.quests[quest].questDescription}</Text>
+                <Button title="Mark Completed" questIndex={questIndex} onPress={() => {handleButtonPress(questIndex)}} disabled={vienna.quests[quest].getCompleted()}/>
+            </View>
+        ))
+    }
+
 // Styles for the DistrictCompletionScreen component
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={localStyles.buttonContainer}>
-                <Button title="Mark Completed" onPress={handleButtonPress} />
                 <Button title="Reset Data" onPress={resetAllData} color="red" />
             </View>
             <Picker
@@ -107,21 +87,14 @@ export default function DistrictCompletionScreen() {
                 style={localStyles.picker}
             >
                 <Picker.Item label="Select a District" value={null} />
-                {districts.map((district, index) => (
-                    <Picker.Item key={index} label={district.name} value={district.districtNum} />
-                ))}
+                {generateDistrictPickerItems()}
             </Picker>
 
             {selectedDistrict && (
                 <View style={localStyles.districtContainer}>
                     <Text style={localStyles.districtTitle}>{selectedDistrict.name}</Text>
                     <ScrollView style={localStyles.questScroll}>
-                        {selectedDistrict.quests.map((quest, questIndex) => (
-                            <View key={questIndex} style={localStyles.questContainer}>
-                                <Text style={localStyles.questName}>{quest.questName}</Text>
-                                <Text style={localStyles.questDescription}>{quest.questDescription}</Text>
-                            </View>
-                        ))}
+                        {generateDistrictQuestItems()}
                     </ScrollView>
                     <Text style={localStyles.completionText}>
                         {calculateCompletionPercentage().toFixed(2)}% Complete

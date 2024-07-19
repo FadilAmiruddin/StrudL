@@ -1,17 +1,15 @@
-// quests.js
+import viennaStorage from "./viennaStorage";
 
 /**
- * Simple quest object to store quest information ands fo completion statur a district.
- * 
+ * Quest objects store a quest's name, description, district number and whether or not the quest is completed.
  */
 export default class Quest {
     constructor(questName, questDescription, districtNum) {
         this.questName = questName;
         this.questDescription = questDescription;
         this.districtNum = districtNum;
-        this.Completed = false;
+        this.completed = false;
     }
-
     getQuestName() {
         return this.questName;
     }
@@ -22,5 +20,13 @@ export default class Quest {
 
     getDistrictNum() {
         return this.districtNum;
+    }
+
+    getCompleted() {
+        return this.completed
+    }
+
+    setCompleted(to) {
+        this.completed = to
     }
 }

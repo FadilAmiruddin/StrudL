@@ -16,8 +16,8 @@
         async function displayQuests() {
             try {
                 // Create a District 1 object
-                const district1 = new District('District 1', 1, '../HelperJsonFiles/quests.json');
-                const district2 = new District('District 2', 2, '../HelperJsonFiles/quests.json');
+                const district1 = new District('District 1', 1);
+                const district2 = new District('District 2', 2);
 
                 // Wait for the quests to load
                 await district1.loadQuests('../HelperJsonFiles/quests.json');
