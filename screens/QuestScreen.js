@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import District from '../HelperJsFiles/District.js'; // Adjust path as needed
-import styles from '../HelperJsFiles/styles.js';
 
-export default function DistrictCompletionScreen() {
+/**
+ * Unfinished functional component for the quest screen.
+ * Currently returns a basic, unstyled "under construction" screen.
+ */
+export default function QuestScreen() {
+    /*
     const [districts, setDistricts] = useState([]);
 
     useEffect(() => {
@@ -16,8 +19,8 @@ export default function DistrictCompletionScreen() {
             ];
 
             const districtPromises = districtNames.map((name, index) => {
-                const district = new District(name, index + 1, '../HelperJsonFiles/quests.json');
-                return district.loadQuests().then(() => district);
+                const district = new District(name, index + 1);
+                return district.loadQuestJson().then(() => district);
             });
 
             try {
@@ -47,4 +50,12 @@ export default function DistrictCompletionScreen() {
             ))}
         </ScrollView>
     );
+    */
+
+    return (
+        <View>
+            <Text>Screen under construction 🚧</Text>
+            <Text>Come back soon! :3</Text>
+        </View>
+    )
 }

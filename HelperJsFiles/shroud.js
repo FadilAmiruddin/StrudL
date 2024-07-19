@@ -9,8 +9,7 @@ import { View } from 'react-native';
 import { Polygon } from 'react-native-maps';
 
 import styles from './styles';
-
-const shroudPolygonVertices = require("../HelperJsonFiles/verts.json");
+import viennaStorage from './viennaStorage';
 
 /** 
  * Functional component representing a polygon making up part of the shroud.
@@ -90,7 +89,7 @@ export const ShroudContainer = forwardRef(function ShroudContainer(props, ref) {
   })
 
   // construct individual shroud polygons and store refs to them
-  for (var i = 0; i < shroudPolygonVertices.verts.length; i++) {
+  for (var i = 0; i < viennaStorage.json.verts.verts.length; i++) {
     shroudPolygonRefs.push(useRef(null))
     const spi = "shroud-polygon-" + (i + 1) // when creating components like this in a loop, keys cannot be inferred. 
     // in order for the DOM to not explode, these must be supplied manually.
@@ -98,9 +97,9 @@ export const ShroudContainer = forwardRef(function ShroudContainer(props, ref) {
     currPoly = <ShroudPolygon
       key={spi}
       style={styles.shroudPolygon}
-      coordinates={shroudPolygonVertices.verts[i]}
-      fillColor={shroudPolygonVertices.fillColors[i]}
-      strokeColor={shroudPolygonVertices.borderColors[i]}
+      coordinates={viennaStorage.json.verts.verts[i]}
+      fillColor={viennaStorage.json.verts.fillColors[i]}
+      strokeColor={viennaStorage.json.verts.borderColors[i]}
       strokeWidth={2}
       ref={shroudPolygonRefs[i]}
     />

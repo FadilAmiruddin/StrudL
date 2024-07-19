@@ -1,41 +1,128 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import viennaStorage from './viennaStorage';
+import District from './District';
+import Quest from './quests';
 
 class City {
     constructor() {
         this.completedDistricts = 0;
+        this.shroudContainerRef = null
+        this.districts = []
+        this.quests = []
+        this.generateQuests()
+        this.generateDistricts()
     }
-    /**
-     * Loads the number of completed districts from AsyncStorage
-     * and sets the value to the completedDistricts property.
-     * If no data is found, the default value of 0 is used.
-    */
-    async loadCompletedDistricts() {
-        try {
-            const savedCompleted = await AsyncStorage.getItem('CityRate');
-            if (savedCompleted !== null) {
-                this.completedDistricts = parseInt(savedCompleted, 10);
+
+    proviteShroudContainerRef(scr) {
+        this.shroudContainerRef = scr
+    }
+
+    /** generate Quest objects to populate vienna.quests */
+    async generateQuests() {
+        const questCompletionArray = await viennaStorage.async.getQuestCompletion()
+        for (var i = 0; i < viennaStorage.json.quests.length; i++) {
+            var newDist = new Quest(viennaStorage.json.quests[i].questName, viennaStorage.json.quests[i].questDescription, i + 1)
+            newDist.setCompleted(questCompletionArray[i])
+            this.quests.push(newDist)
+        }
+    }
+
+    /** generate District objects to populate vienna.districts */
+    async generateDistricts() {
+        for (var i = 0; i < viennaStorage.json.districts.length; i++) {
+            var associatedQuests = []
+            for (var j = 0; j < viennaStorage.json.quests.length; j++) {
+                if (viennaStorage.json.quests[j].districtNum == i + 1) {
+                    associatedQuests.push(j)
+                }
             }
-        } catch (e) {
-            console.log("Error loading completed districts data", e);
+
+            var newDist = new District(viennaStorage.json.districts[i].name, i + 1, associatedQuests)
+
+            this.districts.push(newDist)
         }
     }
+
     /**
-     * Increases the number of completed districts and saves the new value to AsyncStorage. Which is then used to calculate the completion percentage.
+     * Refreshes and resets the city object
      */
-    async increaseCompletedDistricts() {
-        this.completedDistricts++;
+    async resetCity() {
         try {
-            await AsyncStorage.setItem('CityRate', this.completedDistricts.toString());
-            console.log("Saved completed districts:", this.completedDistricts);
-        } catch (e) {
-            console.log("Error saving completed districts", e);
+            await viennaStorage.async.killThemAll()
+            for (const q of this.quests) {
+                q.setCompleted(false)
+            }
+            for (const d of this.districts) {
+                d.setShrouded(true)
+            }
+        } catch (error) {
+            console.error('Error clearing AsyncStorage while resetting City object:', error);
         }
+    }
+
+    isDistrictCompleted(index, zeroIndexed=false) {
+        const realIndex = zeroIndexed ? index - 1 : index
+        var numCompleted = 0
+
+        for (const qi of this.districts[realIndex].quests) {
+            numCompleted += this.quests[qi].getCompleted() ? 1 : 0
+        }
+
+        return numCompleted == this.districts[realIndex].quests.length
     }
 
     calculateCompletionPercentage() {
         const totalDistricts = 23;
-        return totalDistricts ? (this.completedDistricts / totalDistricts) * 100 : 0;
+        var completedDistricts = 0;
+        for (var i = 0; i < totalDistricts; i++) {
+            if (this.isDistrictCompleted(i)) {
+                completedDistricts++
+            }
+        }
+        return totalDistricts ? (completedDistricts / totalDistricts) * 100 : 0;
+    }
+
+    getShroudEnabled(index, zeroIndexed=false) {
+        const realIndex = zeroIndexed ? index - 1 : index
+
+        return this.districts[realIndex].getShrouded()
+    }
+
+    setShroudEnabled(index, to, zeroIndexed=false) {
+        const realIndex = zeroIndexed ? index - 1 : index
+
+        this.districts[realIndex].setShrouded(to)
+
+        this.shroudContainerRef.current.setVisibility(realIndex, to)
+    }
+
+    setQuestCompletion(index, to) {
+        this.quests[index].setCompleted(to)
+        viennaStorage.async.writeIndividualQuestCompletion(index, to)
+
+        this.ensureShroudUpdated()
+    }
+
+    ensureShroudUpdated() {
+        // TODO: in future, shrouds will be disabled by completing certain quests, which will unlock more quests in that district
+        // for now, the shroud drops if all quests are completed in a district
+
+        for (const [index, dist] of this.districts.entries()) {
+            var target = dist.quests.length
+            var actual = 0
+            for (const qi of dist.quests) {
+                actual += this.quests[qi].getCompleted() ? 1 : 0
+            }
+
+            if (actual == target) {
+                this.shroudContainerRef.current.setVisibility(index, false)
+            } else {
+                this.shroudContainerRef.current.setVisibility(index, true)
+            }
+        }
     }
 }
+
+export var vienna = new City()
 
 export default City;
