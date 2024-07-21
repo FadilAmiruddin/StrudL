@@ -1,20 +1,13 @@
 import { vienna } from './HelperJsFiles/city.js' // ensures this gets loaded first (I think)
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Text, View, TouchableOpacity, Button, SafeAreaView, Linking, Platform, Image } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
-import MapViewDirections from 'react-native-maps-directions';
-import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { registerRootComponent } from 'expo';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen.js';
-import styles from './HelperJsFiles/styles';
-import useLocation from './HelperJsFiles/locationPerms';
-import landmark_locations from './HelperJsonFiles/landmark_locations.json';
-import ShroudContainer from './HelperJsFiles/shroud';
 import DistrictCompletionScreen from './screens/DistrictCompletionScreen';
 import CityCompletionScreen from './screens/CityCompletionScreen';
 import QuestScreen from './screens/QuestScreen';  // Assume this screen is created
@@ -22,6 +15,7 @@ import CameraScreen from './screens/CameraScreen';
 import PhotoConfirmationScreen from './screens/PhotoConfirmationScreen';
 
 import viennaStorage from './HelperJsFiles/viennaStorage';
+import { getCompletedLandmarks } from './HelperJsFiles/completedLandmarks';
 
 registerRootComponent(DistrictCompletionScreen);
 

@@ -216,6 +216,12 @@ questContainer: {
     width: 200,
     alignItems: 'center',
   },
+  completedBox: {
+    backgroundColor: '#FF6B6B',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
 });
 
 export default styles;

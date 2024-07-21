@@ -32,6 +32,8 @@ export function MapScreen() {
   // states for the landmark locations and its pop-up menu
   const [landmark, setLandmark] = useState(null);
   const [showLandmarkDialog, setShowLandmarkDialog] = useState(false);
+  const [completedLandmarks, setCompletedLandmarks] = useState({});
+
   const navigation = useNavigation();
 
   const forceRender = () => {
@@ -52,12 +54,30 @@ export function MapScreen() {
     }
   };
 
+  // effect to update the completed landmarks list
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchCompletedLandmarks = async () => {
+        const completed = await getCompletedLandmarks();
+        setCompletedLandmarks(completed);
+      };
+      fetchCompletedLandmarks();
+    }, [])
+  );
+
   useEffect(() => {
     if (myLocation.latitude && myLocation.longitude) {
       updateDirections(myLocation, { latitude: 48.2081743, longitude: 16.3738189 }); // Default to St. Stephen's Cathedral, Vienna
     }
+
+    const fetchCompletedLandmarks = async () => {
+      const completed = await getCompletedLandmarks();
+      setCompletedLandmarks(completed);
+    };
+    fetchCompletedLandmarks();
   }, [myLocation]);
 
+  // Handler for when a marker is pressed, sets the landmark state to the location chosen
   const handleMarkerPress = (location) => {
     // sets the landmark
     setLandmark(location);
@@ -129,7 +149,10 @@ export function MapScreen() {
       <TouchableOpacity style={styles.closeButton} onPress={() => setShowLandmarkDialog(false)}>
         <Text>X</Text>
       </TouchableOpacity>
-      <Text style={styles.landmarkTitle}>landmark: {landmark.title}</Text>
+      <Text style={styles.landmarkTitle}>
+        {completedLandmarks[landmark.title] ? '✅ ' : '❌ '}
+        {landmark.title}
+      </Text>
       <Image 
         source={landmark.image ? {uri: landmark.image} : require('./assets/images/placeholder.jpg')}
         style={styles.landmarkImage}
@@ -139,9 +162,18 @@ export function MapScreen() {
         <Text style={styles.objectivesTitle}>Objectives</Text>
         <Text>{landmark.description}</Text>
       </View>
-      <TouchableOpacity style={styles.landmarkButton} onPress={() => navigation.navigate('Camera')}>
-        <Text>Take Postcard</Text>
-      </TouchableOpacity>
+      {completedLandmarks[landmark.title] ? (
+        <View style={styles.completedBox}>
+          <Text>Your Postcard has been saved to your photo album</Text>
+        </View>
+      ) : (
+        <TouchableOpacity 
+          style={styles.landmarkButton} 
+          onPress={() => navigation.navigate('Camera', { landmarkTitle: landmark.title })}
+        >
+          <Text>Take Postcard</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.landmarkButton} onPress={() => openDirections(landmark)}>
         <Text>Open in Maps</Text>
       </TouchableOpacity>

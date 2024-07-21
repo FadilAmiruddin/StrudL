@@ -1,16 +1,16 @@
-import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
-import { useRef, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, StatusBar, Dimensions, Text, Button} from 'react-native';
-// import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { useRef, useEffect, useState } from 'react';
+import { Camera, CameraView, useCameraPermissions} from 'expo-camera';
+import { StyleSheet, TouchableOpacity, View, StatusBar, Dimensions, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; 
 import { applyOverlay } from '../HelperJsFiles/overlayProcessor';
-
-
 
 export default function CameraScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [orientation, setOrientation] = useState(null);
   const [screenDimensions, setScreenDimensions] = useState(Dimensions.get('window'));
+
+
 
   useEffect(() => {
     StatusBar.setHidden(true);
@@ -38,12 +38,13 @@ export default function CameraScreen({ navigation }) {
       console.log(photo);
 
       const processedPhoto = await applyOverlay(photo.uri, orientation);
-
-      // moves to the photoConfirmation screen in the stack 
-
-      navigation.navigate('PhotoConfirmation', { photoUri: photo.uri });
+      navigation.navigate('PhotoConfirmation', { photoUri: processedPhoto.uri});
     }
   }
+
+  const handleClose = () => {
+    navigation.navigate('Map');
+  };
 
   if (!permission) {
     return <View />;
@@ -60,29 +61,23 @@ export default function CameraScreen({ navigation }) {
     );
   }
 
-
-  const { width, height } = screenDimensions;
-
-  const cameraViewHeight = width * (2/3); // 3:2 ratio
-  const verticalPadding = (height - cameraViewHeight) / 2;
-
   return (
     <View style={styles.container}>
       <CameraView 
         style={styles.camera} 
         ref={cameraRef}
         ratio="3:2"
-        // type={Camera.Constants.Type.back} 
       />
-      <View style={[
-        styles.buttonContainer,
-        orientation === 'LANDSCAPE'
-          ? { bottom: 20, right: 20 }
-          : { bottom: 20, alignSelf: 'center' }
-      ]}>
-        <TouchableOpacity
-          onPress={takePicture}
-          style={styles.button}
+      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+        <Ionicons name="close" size={24} color="white" />
+      </TouchableOpacity>
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity 
+          style={styles.captureButton} 
+          onPress={() => {
+            //cameraRef.current.animateToPreset(Camera.Constants.ShutterPreset.Standard);
+            takePicture();
+          }} 
         />
       </View>
     </View>
@@ -97,17 +92,34 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
+  closeButton: {
     position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 10,
   },
-  button: {
+  controlsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  captureButton: {
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#808080',
+    backgroundColor: 'white',
+    borderWidth: 5,
+    borderColor: 'rgba(255,255,255,0.5)',
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
+  flashButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
   },
 });
