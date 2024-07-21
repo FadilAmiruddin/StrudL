@@ -1,5 +1,9 @@
 import { vienna } from './HelperJsFiles/city.js' // ensures this gets loaded first (I think)
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Text, View, TouchableOpacity, Button, SafeAreaView, Linking, Platform, Image } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { registerRootComponent } from 'expo';
@@ -23,6 +27,12 @@ registerRootComponent(DistrictCompletionScreen);
 
 // ensure the database is ready before running the app
 viennaStorage.async.ensureDatabaseSetup()
+
+// Imports images for landmarks
+const landmark_images = {
+  prater_ferris_wheel: require('./assets/images/landmarkImages/District-10-Prater-Ferris-Wheel.jpg'),
+};
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator(); // Adding Stack navigation
@@ -55,7 +65,6 @@ export default function App() {
   const districtCompletionScreenRef = useRef(null)
   const cityCompletionScreenRef = useRef(null)
   const questCompletionScreenRef = useRef(null)
-  const navigation = useNavigation()
 
   const forceRender = () => {
     if (forceRenderValue + 1 == Number.MAX_VALUE) {

@@ -24,6 +24,10 @@ export function MapScreen() {
   const myLocation = useLocation();
   const shroudContainerRef = useRef(null);
   const mapViewRef = useRef(null);
+  // states for the landmark locations and its pop-up menu
+  const [landmark, setLandmark] = useState(null);
+  const [showLandmarkPopup, setShowLandmarkPopup] = useState(false);
+  const navigation = useNavigation();
 
   const forceRender = () => {
     if (forceRenderValue + 1 == Number.MAX_VALUE) {
@@ -50,6 +54,9 @@ export function MapScreen() {
   }, [myLocation]);
 
   const handleMarkerPress = (location) => {
+    // sets the landmark
+    setLandmark(location);
+
     if (myLocation.latitude && myLocation.longitude) {
       updateDirections(myLocation, { latitude: location.latitude, longitude: location.longitude });
     } else {
@@ -95,6 +102,52 @@ export function MapScreen() {
     mapViewRef.current.animateToRegion(initialViennaRegion, 1000);
   };
 
+  // Renderer for the callout pop-up
+  const renderCallout = (location) => (
+    <Callout onPress={() => setShowLandmarkPopup(true)}>
+      <View style={styles.calloutContainer}>
+        <Text style={styles.calloutTitle}>{location.title}</Text>
+        <Text style={styles.calloutDescription}>{location.description}</Text>
+        <Button 
+          title="Open Quest" 
+          onPress={() => setShowLandmarkPopup(true)}
+          style={styles.calloutButton}
+        />
+      </View>
+    </Callout>
+  );
+
+
+  // Renderer for the landmark pop-up
+  const renderLandmarkPopup = () => (
+    <View style={styles.questPopup}>
+      <TouchableOpacity style={styles.closeButton} onPress={() => setShowLandmarkPopup(false)}>
+        <Text>X</Text>
+      </TouchableOpacity>
+      <Text style={styles.questTitle}>Quest: {landmark.title}</Text>
+      <Image 
+        source={landmark.image ? landmark_images[landmark.image.split('.')[0]] : require('./assets/images/placeholder.jpg')}
+        style={styles.questImage}
+      />
+      <Text>{calculateDistance(myLocation, landmark)}km from your location</Text>
+      <View style={styles.objectivesContainer}>
+        <Text style={styles.objectivesTitle}>Objectives</Text>
+        <Text>{landmark.description}</Text>
+      </View>
+      <TouchableOpacity style={styles.questButton} onPress={() => navigation.navigate('Camera')}>
+        <Text>Take Postcard</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.questButton} onPress={() => openDirections(landmark)}>
+        <Text>Open in Maps</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  // calculates the distance to the location, didn't want to do it.
+  const calculateDistance = (location1, location2) => {
+    return "0.5";
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <MapView
@@ -132,19 +185,26 @@ export function MapScreen() {
             pinColor="red"
             onPress={() => handleMarkerPress(location)}
           >
-            <Callout>
+            <Callout onPress={() => {
+              setLandmark(location);
+              setShowLandmarkPopup(true);
+            }}>
               <View style={styles.calloutContainer}>
                 <Text style={styles.calloutTitle}>{location.title}</Text>
                 <Text style={styles.calloutDescription}>{location.description}</Text>
                 <Button 
-                  title="Directions" 
-                  onPress={() => openDirections(location)}
+                  title="Open Quest" 
+                  onPress={() => {
+                    setLandmark(location);
+                    setShowLandmarkPopup(true);
+                  }}
                   style={styles.calloutButton}
                 />
               </View>
             </Callout>
           </Marker>
         ))}
+
         {directions && (
           <MapViewDirections
             origin={directions.origin}
@@ -157,6 +217,10 @@ export function MapScreen() {
         )}
         <ShroudContainer ref={shroudContainerRef} />
       </MapView>
+
+      {/* Checks if landmark pop-up has been requested, if so it brings up the landmark pop-up for the landmark. */}
+      {showLandmarkPopup && renderLandmarkPopup()}
+
       <StatusBar style="auto" />
     </SafeAreaView>
   );

@@ -1,13 +1,12 @@
 // PhotoConfirmationScreen.js
 import React, {useEffect} from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 export default function PhotoConfirmationScreen({ route, navigation }) {
   const { photoUri } = route.params;
 
-  useEffect(() => {
+  /*useEffect(() => {
     // Lock the screen orientation to portrait
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
@@ -16,6 +15,7 @@ export default function PhotoConfirmationScreen({ route, navigation }) {
       ScreenOrientation.unlockAsync();
     };
   }, []);
+  */
 
   const handleConfirm = () => {
     // Here you can add logic to save or process the confirmed photo
