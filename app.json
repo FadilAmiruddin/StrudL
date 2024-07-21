@@ -17,16 +17,11 @@
         "googleMapsApiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
       },
       "infoPlist": {
-<<<<<<< HEAD
-        "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks."
-      },
-      "bundleIdentifier": "com.anonymous.StrudL"
-=======
         "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks.",
         "NSPhotoLibraryUsageDescription": "Allow StrudL to access your photos.",
         "NSPhotoLibraryAddUsageDescription": "Allow StrudL to save photos."
-      }
->>>>>>> deb964a (added the overLay processor, changed naming conventions in App.js. Be careful with this branch its probably broken now)
+      },
+      "bundleIdentifier": "com.anonymous.StrudL"
     },
     "android": {
       "adaptiveIcon": {

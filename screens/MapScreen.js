@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Text, View, Button, SafeAreaView, Linking, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, Button, SafeAreaView, Linking, Platform, Image } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { StatusBar } from 'expo-status-bar';
@@ -10,17 +10,13 @@ import ShroudContainer from '../HelperJsFiles/shroud';
 
 import viennaStorage from '../HelperJsFiles/viennaStorage';
 import { vienna } from '../HelperJsFiles/city';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import refreshIfFocused from '../HelperJsFiles/screenRerender';
+import { getCompletedLandmarks } from '../HelperJsFiles/completedLandmarks';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
 
 export const MAP_SCREEN_ID = "MapScreen"
-
-// Imports images for landmarks
-const landmark_images = {
-  prater_ferris_wheel: require('./assets/images/landmarkImages/District-10-Prater-Ferris-Wheel.jpg'),
-};
 
 export function MapScreen() {
   const isFocused = useIsFocused()
@@ -144,8 +140,8 @@ export function MapScreen() {
 
 
   // Renders the dialog for a landmark dialog
-  const renderLandmarkDialog = () => (
-    <View style={styles.landmarkDialog}>
+  const renderLandmarkDialog = () => 
+    (<View style={styles.landmarkDialog}>
       <TouchableOpacity style={styles.closeButton} onPress={() => setShowLandmarkDialog(false)}>
         <Text>X</Text>
       </TouchableOpacity>
@@ -154,7 +150,7 @@ export function MapScreen() {
         {landmark.title}
       </Text>
       <Image 
-        source={landmark.image ? {uri: landmark.image} : require('./assets/images/placeholder.jpg')}
+        source={landmark.image ? {uri: landmark.image} : require('../assets/images/placeholder.jpg')}
         style={styles.landmarkImage}
       />
       <Text>{calculateDistance(myLocation, landmark)}km from your location</Text>

@@ -22,16 +22,8 @@ registerRootComponent(DistrictCompletionScreen);
 // ensure the database is ready before running the app
 viennaStorage.async.ensureDatabaseSetup()
 
-// Imports images for landmarks
-const landmark_images = {
-  prater_ferris_wheel: require('./assets/images/landmarkImages/District-10-Prater-Ferris-Wheel.jpg'),
-};
-
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator(); // Adding Stack navigation
-
-const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
 
 // New Stack to handle the postcard creation process
 function CameraStack() {
@@ -80,7 +72,7 @@ export default function App() {
           options = 
           {
             {
-              //tabBarButton: () => null,
+              tabBarButton: () => null,
               headerShown: false,
               tabBarStyle: { display: 'none'}
             }
