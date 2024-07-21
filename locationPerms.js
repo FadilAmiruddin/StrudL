@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 
-const useLocation = () => {
+export const useLocation = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [errorMsg, setErrorMsg] = useState(null);
 

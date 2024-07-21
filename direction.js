@@ -1,6 +1,6 @@
 // directions.js
 
-const setDirections = (myLocation, destination, setDirectionsState, setShowMap) => {
+export const setDirections = (myLocation, destination, setDirectionsState, setShowMap) => {
     if (!myLocation.latitude || !myLocation.longitude) {
       console.error('myLocation is undefined or invalid');
       return;
