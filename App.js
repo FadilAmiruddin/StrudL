@@ -7,6 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen.js';
+import styles from './HelperJsFiles/styles';
+import useLocation from './HelperJsFiles/locationPerms';
+import landmark_locations from './HelperJsonFiles/landmark_locations.json';
+import ShroudContainer from './HelperJsFiles/shroud';
 import DistrictCompletionScreen from './screens/DistrictCompletionScreen';
 import CityCompletionScreen from './screens/CityCompletionScreen';
 import QuestScreen from './screens/QuestScreen';  // Assume this screen is created
@@ -68,21 +72,6 @@ export default function App() {
         <Tab.Screen name="District Completion Rate" ref={districtCompletionScreenRef} component={DistrictCompletionScreen} />
         <Tab.Screen name="City Completion Rate" ref={cityCompletionScreenRef} component={CityCompletionScreen} />
         <Tab.Screen name="Quest" ref={questCompletionScreenRef} component={QuestScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="District Completion Rate" component={DistrictCompletionScreen} />
-        <Tab.Screen name="City Completion Rate" component={CityCompletionScreen} />
-        <Tab.Screen name="Quest" component={QuestScreen} />
         <Tab.Screen name="Camera" // Adds new tab containing the camera 
           component={CameraStack} 
           options = 
@@ -92,7 +81,7 @@ export default function App() {
               headerShown: false,
               tabBarStyle: { display: 'none'}
             }
-          }/> 
+          }/>
       </Tab.Navigator>
     </NavigationContainer>
   );

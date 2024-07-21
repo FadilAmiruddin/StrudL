@@ -1,15 +1,27 @@
 // PhotoConfirmationScreen.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 
 export default function PhotoConfirmationScreen({ route, navigation }) {
   const { photoUri } = route.params;
+
+  useEffect(() => {
+    // Lock the screen orientation to portrait
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+
+    // Cleanup function to unlock orientation when component unmounts
+    return () => {
+      ScreenOrientation.unlockAsync();
+    };
+  }, []);
 
   const handleConfirm = () => {
     // Here you can add logic to save or process the confirmed photo
     console.log('Photo confirmed:', photoUri);
     // Navigate back to the main app flow (you might want to adjust this based on your app's structure)
-    navigation.navigate('Home');
+    navigation.navigate('Map');
   };
 
   const handleRetake = () => {
@@ -18,7 +30,11 @@ export default function PhotoConfirmationScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: photoUri }} style={styles.image} />
+      <Image 
+      source={{ uri: photoUri }} 
+      style={styles.image} 
+      resizeMode="contain"/>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleRetake}>
           <Text style={styles.buttonText}>Retake</Text>
