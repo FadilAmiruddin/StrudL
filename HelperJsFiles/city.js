@@ -9,8 +9,28 @@ class City {
         this.shroudContainerRef = null
         this.districts = []
         this.quests = []
+        this.districtScreenValue = Number.MIN_VALUE
+        this.cityScreenValue = Number.MIN_VALUE
+        this.lastScreen = ""
         this.generateQuests()
         this.generateDistricts()
+    }
+
+    getLastScreen() {
+        return this.lastScreen
+    }
+
+    setLastScreen(to) {
+        this.lastScreen = to
+    }
+
+    queueDistrictScreenRerender() {
+        this.districtScreenValue++
+    }
+
+    queueCityScreenRerender() {
+        this.cityScreenValue++
+        console.log("cityScreenRefreshQueued")
     }
 
     proviteShroudContainerRef(scr) {
@@ -49,11 +69,12 @@ class City {
     async resetCity() {
         try {
             await viennaStorage.async.killThemAll()
+            await viennaStorage.async.ensureDatabaseSetup()
             for (const q of this.quests) {
                 q.setCompleted(false)
             }
             for (const d of this.districts) {
-                d.setShrouded(true)
+                await d.setShrouded(true)
             }
         } catch (error) {
             console.error('Error clearing AsyncStorage while resetting City object:', error);
@@ -100,7 +121,7 @@ class City {
         this.quests[index].setCompleted(to)
         viennaStorage.async.writeIndividualQuestCompletion(index, to)
 
-        this.ensureShroudUpdated()
+        //this.ensureShroudUpdated()
     }
 
     ensureShroudUpdated() {

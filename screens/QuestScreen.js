@@ -52,6 +52,15 @@ export default function QuestScreen() {
     );
     */
 
+    const [forceRenderValue, forceRenderFunction] = useState(0);
+
+    const forceRender = () => {
+        if (forceRenderValue + 1 == Number.MAX_VALUE) {
+            forceRenderValue = 0
+        }
+        forceRenderFunction(forceRenderValue + 1)
+    }
+
     return (
         <View>
             <Text>Screen under construction 🚧</Text>
