@@ -16,6 +16,9 @@
       "config": {
         "googleMapsApiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
       },
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks."
+      },
       "bundleIdentifier": "com.anonymous.StrudL"
     },
     "android": {
@@ -27,10 +30,20 @@
         "googleMaps": {
           "apiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
         }
-      }
+      },
+      "permissions": ["CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow StrudL to access your camera."
+        }
+        
+      ]
+    ]
   }
 }

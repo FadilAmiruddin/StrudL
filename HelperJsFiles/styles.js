@@ -91,6 +91,18 @@ districtName: {
 questContainer: {
     marginBottom: 8,
 },
+  cameraButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+  },
+  cameraButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;
