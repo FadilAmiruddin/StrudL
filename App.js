@@ -46,3 +46,17 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen name="District Completion Rate" component={DistrictCompletionScreen} />
+        <Tab.Screen name="City Completion Rate" component={CityCompletionScreen} />
+        <Tab.Screen name="Quest" component={QuestScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
