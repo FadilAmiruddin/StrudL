@@ -182,7 +182,22 @@ export function MapScreen() {
 
   // calculates the distance to the location, didn't want to do it.
   const calculateDistance = (location1, location2) => {
-    return "0.5";
+    const toRadians = (degree) => degree * (Math.PI / 180);
+
+    const lat1 = toRadians(location1.latitude);
+    const lon1 = toRadians(location1.longitude);
+    const lat2 = toRadians(location2.latitude);
+    const lon2 = toRadians(location2.longitude);
+  
+    const R = 6371; 
+    const dLat = lat2 - lat1;
+    const dLon = lon2 - lon1;
+  
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+    const distance = R * c;
+    return distance.toFixed(2);
   };
 
   return (
