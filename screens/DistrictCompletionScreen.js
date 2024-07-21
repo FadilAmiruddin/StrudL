@@ -3,10 +3,19 @@ import { View, Text, ScrollView, StyleSheet, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../HelperJsFiles/styles.js';
 import { vienna } from '../HelperJsFiles/city.js'
+import { useIsFocused } from '@react-navigation/native';
+import refreshIfFocused from '../HelperJsFiles/screenRerender.js';
+
+export const DISTRICT_COMPLETION_SCREEN_ID = "DistrictCompletionScreen"
 
 export default function DistrictCompletionScreen() {
+    const isFocused = useIsFocused()
     const [forceRenderValue, forceRenderFunction] = useState(0);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+    useEffect(() => {
+        forceRender();
+    }, [vienna.districtScreenValue])
 
     const forceRender = () => {
         if (forceRenderValue + 1 == Number.MAX_VALUE) {
@@ -15,6 +24,8 @@ export default function DistrictCompletionScreen() {
         forceRenderFunction(forceRenderValue + 1)
     }
 
+    refreshIfFocused(isFocused, DISTRICT_COMPLETION_SCREEN_ID, forceRender)
+
     /** Callback function for marking a quest as complete */
     const handleButtonPress = async (index) => {
         if (selectedDistrict) {
@@ -22,6 +33,7 @@ export default function DistrictCompletionScreen() {
             vienna.setQuestCompletion(indexInVienna, true)
 
             forceRender()
+            vienna.queueCityScreenRerender()
         }
     };
     /*
@@ -53,7 +65,6 @@ export default function DistrictCompletionScreen() {
         try {
             await vienna.resetCity()
             setSelectedDistrict(null); // Reset selected district
-            
         } catch (error) {
             console.error('Error clearing AsyncStorage:', error);
         }

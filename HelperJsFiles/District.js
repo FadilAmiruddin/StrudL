@@ -31,7 +31,7 @@ export default class District {
 
     async setShrouded(to) {
         this.shrouded = to
-        await viennaStorage.async.writeIndividualDistrictShroud(districtNum, to)
+        await viennaStorage.async.writeIndividualDistrictShroud(this.districtNum, to)
     }
 
 }

@@ -10,14 +10,29 @@ import ShroudContainer from '../HelperJsFiles/shroud';
 
 import viennaStorage from '../HelperJsFiles/viennaStorage';
 import { vienna } from '../HelperJsFiles/city';
+import { useIsFocused } from '@react-navigation/native';
+import refreshIfFocused from '../HelperJsFiles/screenRerender';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
 
+export const MAP_SCREEN_ID = "MapScreen"
+
 export function MapScreen() {
+  const isFocused = useIsFocused()
+  const [forceRenderValue, forceRenderFunction] = useState(0);
   const [directions, setDirectionsState] = useState(null);
   const myLocation = useLocation();
   const shroudContainerRef = useRef(null);
   const mapViewRef = useRef(null);
+
+  const forceRender = () => {
+    if (forceRenderValue + 1 == Number.MAX_VALUE) {
+        forceRenderValue = 0
+    }
+    forceRenderFunction(forceRenderValue + 1)
+  }
+
+  refreshIfFocused(isFocused, MAP_SCREEN_ID, forceRender)
 
   const updateDirections = (origin, destination) => {
     if (origin.latitude && origin.longitude) {
