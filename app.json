@@ -17,9 +17,16 @@
         "googleMapsApiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
       },
       "infoPlist": {
+<<<<<<< HEAD
         "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks."
       },
       "bundleIdentifier": "com.anonymous.StrudL"
+=======
+        "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks.",
+        "NSPhotoLibraryUsageDescription": "Allow StrudL to access your photos.",
+        "NSPhotoLibraryAddUsageDescription": "Allow StrudL to save photos."
+      }
+>>>>>>> deb964a (added the overLay processor, changed naming conventions in App.js. Be careful with this branch its probably broken now)
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +38,7 @@
           "apiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
         }
       },
-      "permissions": ["CAMERA"]
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,7 +49,14 @@
         {
           "cameraPermission": "Allow StrudL to access your camera."
         }
-        
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow StrudL to access your photos.",
+          "savePhotosPermission": "Allow StrudL to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ]
   }

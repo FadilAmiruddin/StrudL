@@ -1,6 +1,8 @@
 // PhotoConfirmationScreen.js
 import React, {useEffect} from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
+
 
 
 export default function PhotoConfirmationScreen({ route, navigation }) {
@@ -17,23 +19,32 @@ export default function PhotoConfirmationScreen({ route, navigation }) {
   }, []);
   */
 
-  const handleConfirm = () => {
-    // Here you can add logic to save or process the confirmed photo
-    console.log('Photo confirmed:', photoUri);
-    // Navigate back to the main app flow (you might want to adjust this based on your app's structure)
-    navigation.navigate('Map');
-  };
+    const handleConfirm = async () => {
+      try {
+        // Save to media library
+        await MediaLibrary.saveToLibraryAsync(photoUri);
+        
+        // Here you would typically save the photo URI to your app's state or storage
+        // For example: await AsyncStorage.setItem('lastPhoto', photoUri);
+        
+        console.log('Photo saved:', photoUri);
+        navigation.navigate('Map');
+      } catch (error) {
+        console.error('Error saving photo:', error);
+      }
+    };
 
-  const handleRetake = () => {
-    navigation.goBack();
-  };
+    const handleRetake = () => {
+      // The photo will be automatically discarded when we navigate back
+      navigation.goBack();
+    };
 
-  return (
+  return (  
     <View style={styles.container}>
       <Image 
-      source={{ uri: photoUri }} 
-      style={styles.image} 
-      resizeMode="contain"/>
+        source={{ uri: photoUri }} 
+        style={styles.image} 
+        resizeMode="contain"/>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleRetake}>

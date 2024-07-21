@@ -144,7 +144,7 @@ questContainer: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  questPopup: {
+  landmarkDialog: {
     position: 'absolute',
     bottom: 20,
     left: 20,
@@ -164,12 +164,12 @@ questContainer: {
     right: 10,
     padding: 5,
   },
-  questTitle: {
+  landmarkTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  questImage: {
+  landmarkImage: {
     width: '100%',
     height: 200,
     borderRadius: 10,
@@ -183,18 +183,18 @@ questContainer: {
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  questButton: {
+  landmarkButton: {
     backgroundColor: '#007AFF',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
   },
-  questButtonText: {
+  landmarkButtonText: {
     color: 'white',
     fontSize: 16,
   },
-  questIndicator: {
+  landmarkIndicator: {
     position: 'absolute',
     bottom: 20,
     left: 20,
@@ -202,7 +202,7 @@ questContainer: {
     padding: 10,
     borderRadius: 5,
   },
-  questIndicatorText: {
+  landmarkIndicatorText: {
     color: 'white',
     fontSize: 14,
   },

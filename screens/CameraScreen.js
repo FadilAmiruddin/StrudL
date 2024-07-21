@@ -1,7 +1,9 @@
 import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, StatusBar, Dimensions, Text, Button} from 'react-native';
-import * as ScreenOrientation from 'expo-screen-orientation';
+// import * as ScreenOrientation from 'expo-screen-orientation';
+import { applyOverlay } from '../HelperJsFiles/overlayProcessor';
+
 
 
 export default function CameraScreen({ navigation }) {
@@ -18,7 +20,7 @@ export default function CameraScreen({ navigation }) {
       StatusBar.setHidden(false);
       dimensionsSubscription.remove();
     };
-  }, []);
+  }, []); 
 
   const updateScreenDimensions = ({ window }) => {
     setScreenDimensions(window);
@@ -34,6 +36,8 @@ export default function CameraScreen({ navigation }) {
       });
       
       console.log(photo);
+
+      const processedPhoto = await applyOverlay(photo.uri, orientation);
 
       // moves to the photoConfirmation screen in the stack 
 
@@ -64,7 +68,12 @@ export default function CameraScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} ref={cameraRef} />
+      <CameraView 
+        style={styles.camera} 
+        ref={cameraRef}
+        ratio="3:2"
+        // type={Camera.Constants.Type.back} 
+      />
       <View style={[
         styles.buttonContainer,
         orientation === 'LANDSCAPE'

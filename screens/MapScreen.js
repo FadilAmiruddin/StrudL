@@ -17,6 +17,11 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
 
 export const MAP_SCREEN_ID = "MapScreen"
 
+// Imports images for landmarks
+const landmark_images = {
+  prater_ferris_wheel: require('./assets/images/landmarkImages/District-10-Prater-Ferris-Wheel.jpg'),
+};
+
 export function MapScreen() {
   const isFocused = useIsFocused()
   const [forceRenderValue, forceRenderFunction] = useState(0);
@@ -26,7 +31,7 @@ export function MapScreen() {
   const mapViewRef = useRef(null);
   // states for the landmark locations and its pop-up menu
   const [landmark, setLandmark] = useState(null);
-  const [showLandmarkPopup, setShowLandmarkPopup] = useState(false);
+  const [showLandmarkDialog, setShowLandmarkDialog] = useState(false);
   const navigation = useNavigation();
 
   const forceRender = () => {
@@ -104,13 +109,13 @@ export function MapScreen() {
 
   // Renderer for the callout pop-up
   const renderCallout = (location) => (
-    <Callout onPress={() => setShowLandmarkPopup(true)}>
+    <Callout onPress={() => setShowLandmarkDialog(true)}>
       <View style={styles.calloutContainer}>
         <Text style={styles.calloutTitle}>{location.title}</Text>
         <Text style={styles.calloutDescription}>{location.description}</Text>
         <Button 
           title="Open Quest" 
-          onPress={() => setShowLandmarkPopup(true)}
+          onPress={() => setShowLandmarkDialog(true)}
           style={styles.calloutButton}
         />
       </View>
@@ -118,26 +123,26 @@ export function MapScreen() {
   );
 
 
-  // Renderer for the landmark pop-up
-  const renderLandmarkPopup = () => (
-    <View style={styles.questPopup}>
-      <TouchableOpacity style={styles.closeButton} onPress={() => setShowLandmarkPopup(false)}>
+  // Renders the dialog for a landmark dialog
+  const renderLandmarkDialog = () => (
+    <View style={styles.landmarkDialog}>
+      <TouchableOpacity style={styles.closeButton} onPress={() => setShowLandmarkDialog(false)}>
         <Text>X</Text>
       </TouchableOpacity>
-      <Text style={styles.questTitle}>Quest: {landmark.title}</Text>
+      <Text style={styles.landmarkTitle}>landmark: {landmark.title}</Text>
       <Image 
-        source={landmark.image ? landmark_images[landmark.image.split('.')[0]] : require('./assets/images/placeholder.jpg')}
-        style={styles.questImage}
+        source={landmark.image ? {uri: landmark.image} : require('./assets/images/placeholder.jpg')}
+        style={styles.landmarkImage}
       />
       <Text>{calculateDistance(myLocation, landmark)}km from your location</Text>
       <View style={styles.objectivesContainer}>
         <Text style={styles.objectivesTitle}>Objectives</Text>
         <Text>{landmark.description}</Text>
       </View>
-      <TouchableOpacity style={styles.questButton} onPress={() => navigation.navigate('Camera')}>
+      <TouchableOpacity style={styles.landmarkButton} onPress={() => navigation.navigate('Camera')}>
         <Text>Take Postcard</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.questButton} onPress={() => openDirections(landmark)}>
+      <TouchableOpacity style={styles.landmarkButton} onPress={() => openDirections(landmark)}>
         <Text>Open in Maps</Text>
       </TouchableOpacity>
     </View>
@@ -185,23 +190,7 @@ export function MapScreen() {
             pinColor="red"
             onPress={() => handleMarkerPress(location)}
           >
-            <Callout onPress={() => {
-              setLandmark(location);
-              setShowLandmarkPopup(true);
-            }}>
-              <View style={styles.calloutContainer}>
-                <Text style={styles.calloutTitle}>{location.title}</Text>
-                <Text style={styles.calloutDescription}>{location.description}</Text>
-                <Button 
-                  title="Open Quest" 
-                  onPress={() => {
-                    setLandmark(location);
-                    setShowLandmarkPopup(true);
-                  }}
-                  style={styles.calloutButton}
-                />
-              </View>
-            </Callout>
+            {renderCallout(location)}
           </Marker>
         ))}
 
@@ -219,7 +208,7 @@ export function MapScreen() {
       </MapView>
 
       {/* Checks if landmark pop-up has been requested, if so it brings up the landmark pop-up for the landmark. */}
-      {showLandmarkPopup && renderLandmarkPopup()}
+      {showLandmarkDialog && renderLandmarkDialog()}
 
       <StatusBar style="auto" />
     </SafeAreaView>
