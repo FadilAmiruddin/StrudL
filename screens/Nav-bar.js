@@ -3,15 +3,15 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MapScreen from './MapScreen'; // Adjust the path as necessary
 
 const App = () => {
-  const [bottom, setBottom] = useState(0);
+  const [bottom, setBottom] = useState(-80);
   const [isSmall, setIsSmall] = useState(false);
 
   const handlePress = () => {
     if (!isSmall) {
-      setBottom(-760); // Move the rectangle up
+      setBottom(-290); // Move the rectangle up
       setIsSmall(true);
     } else {
-      setBottom(0); // Move the rectangle down
+      setBottom(-80); // Move the rectangle down
       setIsSmall(false);
     }
     console.log('Button pressed');
