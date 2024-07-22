@@ -1,146 +1,157 @@
-import React, { useState } from "react";
-import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from "react-native";
-import MapView from "react-native-maps";
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import MapScreen from './MapScreen'; // Adjust the path as necessary
 
-function Untitled(props) {
-  const [rectHeight, setRectHeight] = useState(200);
-  const [isSmall, setIsSmall] = useState(true);
+const App = () => {
+  const [bottom, setBottom] = useState(0);
+  const [isSmall, setIsSmall] = useState(false);
 
   const handlePress = () => {
-    if (isSmall) {
-      setRectHeight(400);
-      setIsSmall(false);
-    } else {
-      setRectHeight(200);
+    if (!isSmall) {
+      setBottom(-760); // Move the rectangle up
       setIsSmall(true);
+    } else {
+      setBottom(0); // Move the rectangle down
+      setIsSmall(false);
     }
-    console.log(rectHeight);
+    console.log('Button pressed');
+  };
+
+  const Go1 = () => {
+    console.log('Go 1 pressed');
+  };
+
+  const Go2 = () => {
+    console.log('Go 2 pressed');
+  };
+
+  const Go3 = () => {
+    console.log('Go 3 pressed');
   };
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 48.2082,
-          longitude: 16.3738,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
-      <ScrollView contentContainerStyle={[styles.contentContainer, { height: rectHeight }]}>
-        <Text style={styles.todaysQuest}>Today's Quest</Text>
-        <View style={[styles.rect, { height: rectHeight }]}>
-          <TouchableOpacity onPress={handlePress} style={styles.button}></TouchableOpacity>
-          <Text style={styles.quest3}>Quest</Text>
-          <View style={styles.metersXStack}>
-            <Text style={styles.metersX}>Meters : x</Text>
-            <Text style={styles.quest4}>Quest</Text>
+      <MapScreen style={styles.map} />
+      <View style={[styles.rectangle, { bottom }]}>
+        <TouchableOpacity style={styles.buttonWrapper} onPress={handlePress}>
+          <View style={styles.modalHeaderButton} />
+        </TouchableOpacity>
+        <Text style={styles.modalTitle}>Today’s Quests</Text>
+
+        <View style={styles.questContainer}>
+          <View style={styles.questTextContainer}>
+            <Text style={styles.questTitle}>Eat a Kasekrainer</Text>
+            <Text style={styles.questDistance}>20km</Text>
           </View>
-          <View style={styles.metersX1Stack}>
-            <Text style={styles.metersX1}>Meters : x</Text>
-            <Text style={styles.quest5}>Quest</Text>
-          </View>
-          <Text style={styles.metersX2}>Meters : x</Text>
+          <View style={styles.flexSpacer} />
+          <TouchableOpacity style={styles.goButton} onPress={Go1}>
+            <Text style={styles.goButtonText}>Go</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+
+        <View style={styles.questContainer}>
+          <View style={styles.questTextContainer}>
+            <Text style={styles.questTitle}>Visit Karlskirche</Text>
+            <Text style={styles.questDistance}>15m</Text>
+          </View>
+          <View style={styles.flexSpacer} />
+          <TouchableOpacity style={styles.goButton} onPress={Go2}>
+            <Text style={styles.goButtonText}>Go</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.questContainer}>
+          <View style={styles.questTextContainer}>
+            <Text style={styles.questTitle}>Ride the Riesenrad</Text>
+            <Text style={styles.questDistance}>30km</Text>
+          </View>
+          <View style={styles.flexSpacer} />
+          <TouchableOpacity style={styles.goButton} onPress={Go3}>
+            <Text style={styles.goButtonText}>Go</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,1)",
-    marginBottom:-20,  
   },
   map: {
-    flex: 4,
+    ...StyleSheet.absoluteFillObject,
   },
-  contentContainer: {
-    flexGrow: 1,
-    justifyContent: "flex-end",
+  rectangle: {
+    position: 'absolute',
+    width: '100%',
+    height: 348,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
   },
-  rect: {
-    backgroundColor: "rgba(255,255,255,1)",
-    padding: 16,
+  buttonWrapper: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    width: 90,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
-  button: {
-    width: 74,
-    height: 20,
-    backgroundColor: "#E6E6E6",
-    marginBottom: 16,
-    alignSelf: 'center',
+  modalHeaderButton: {
+    width: 70,
+    height: 8,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 20,
+    marginBottom: 32,
+    marginLeft: 280,
   },
-  quest3: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    lineHeight: 50,
-    fontSize: 25,
-    marginTop: 10,
-    marginLeft: 25,
-  },
-  metersX: {
-    top: 0,
-    left: 18,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 24,
-    width: 89,
-  },
-  quest4: {
-    top: 12,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    lineHeight: 50,
-    fontSize: 25,
-  },
-  metersXStack: {
-    width: 125,
-    height: 62,
-    marginLeft: 25,
-  },
-  metersX1: {
-    top: 0,
-    left: 18,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 24,
-    width: 89,
-  },
-  quest5: {
-    top: 12,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    lineHeight: 50,
-    fontSize: 25,
-  },
-  metersX1Stack: {
-    width: 125,
-    height: 62,
-    marginLeft: 25,
-  },
-  metersX2: {
-    fontFamily: "roboto-regular",
-    color: "#121212",
-    height: 24,
-    width: 89,
-    marginLeft: 43,
-  },
-  todaysQuest: {
-    fontFamily: "roboto-700",
-    color: "#121212",
-    lineHeight: 50,
+  modalTitle: {
+    color: '#000000',
     fontSize: 30,
-    textAlign: "center",
-    marginVertical: 20,
+    marginBottom: 15,
+  },
+  questContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    width: '90%',
+    alignItems: 'center',
+  },
+  questTextContainer: {
+    flex: 3,
+    alignSelf: 'flex-start',
+    marginRight: 6,
+  },
+  questTitle: {
+    color: '#000000',
+    fontSize: 18,
+    marginBottom: 2,
+  },
+  questDistance: {
+    color: '#6C6C6C',
+    fontSize: 15,
+  },
+  flexSpacer: {
+    flex: 1,
+  },
+  goButton: {
+    flex: 1,
+    alignSelf: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
+    borderRadius: 8,
+    paddingVertical: 14,
+  },
+  goButtonText: {
+    color: '#000000',
+    fontSize: 22.5,
   },
 });
 
-export default Untitled;
+export default App;
