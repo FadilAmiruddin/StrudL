@@ -3,13 +3,18 @@ import { Camera, CameraView, useCameraPermissions} from 'expo-camera';
 import { StyleSheet, TouchableOpacity, View, StatusBar, Dimensions, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { applyOverlay } from '../HelperJsFiles/overlayProcessor';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function CameraScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [orientation, setOrientation] = useState(null);
   const [screenDimensions, setScreenDimensions] = useState(Dimensions.get('window'));
+  const isFocused = useIsFocused()
 
+  if (isFocused) {
+    console.log("screna")
+  }
 
 
   useEffect(() => {
@@ -51,11 +56,12 @@ export default function CameraScreen({ navigation }) {
   }
 
   if (!permission.granted) {
+    console.log("uwu")
     return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <TouchableOpacity style={styles.button} onPress={requestPermission}>
-          <Text style={styles.buttonText}>Grant Permission</Text>
+      <View >
+        <Text >We need your permission to show the camera</Text>
+        <TouchableOpacity onPress={requestPermission}>
+          <Text >Grant Permission</Text>
         </TouchableOpacity>
       </View>
     );
