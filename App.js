@@ -1,9 +1,7 @@
 import { vienna } from './HelperJsFiles/city.js'; // ensures this gets loaded first
 import React, { useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { registerRootComponent } from 'expo';
 import 'react-native-gesture-handler';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { registerRootComponent } from 'expo';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
@@ -16,7 +14,6 @@ import PhotoConfirmationScreen from './screens/PhotoConfirmationScreen';
 import Nav from './screens/Nav-bar.js'
 
 import viennaStorage from './HelperJsFiles/viennaStorage';
-import { getCompletedLandmarks } from './HelperJsFiles/completedLandmarks';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
