@@ -1,159 +1,65 @@
 [
     {
-        "questName": "Explore the Historic Center",
-        "questDescription": "Discover the history and architecture of the Inner City.",
-        "districtNum": 1
+        "questName": "A Night At the Opera",
+        "questDescription": "Visit the Vienna State Opera",
+        "districtNum": 1,
+        "coordinates": "48°12′10″N 16°22′06.5″E"
     },
     {
-        "questName": "Visit St. Stephen's Cathedral",
+        "questName": "A Scent of Roses",
         "questDescription": "Tour the famous St. Stephen's Cathedral and learn about its history.",
-        "districtNum": 1
+        "districtNum": 1,
+        "coordinates": "48°12′29″N 16°21′40″E"
     },
     {
-        "questName": "Enjoy a Coffee at a Historic Cafe",
-        "questDescription": "Experience the traditional Viennese coffee culture.",
-        "districtNum": 1
+        "questName": "Into The Catacombs",
+        "questDescription": "Tour the catacombs underneath St. Stephen's Cathedral.",
+        "districtNum": 1,
+        "coordinates": "48.2085°N 16.373°E"
          
     },
     {
-        "questName": "Take a Walk along the Danube Canal",
+        "questName": "Ride the Riesenrad",
         "questDescription": "Enjoy the scenic views along the Danube Canal.",
-        "districtNum": 2
+        "districtNum": 2,
+        "coordinates": "48.2167° N, 16.3959° E"
          
     },
     {
-        "questName": "Explore Prater Park",
-        "questDescription": "Have fun at the amusement park and enjoy the giant Ferris wheel.",
-        "districtNum": 2
+        "questName": "Mozart's Delight",
+        "questDescription": "Try a Mozartkrugel ball, which can also be found at Vienna’s chocolate museum. (optional)",
+        "districtNum": 2,
+        "coordinates": "None"
          
     },
     {
-        "questName": "Visit the Hundertwasser House",
-        "questDescription": "See the unique and colorful architecture of the Hundertwasser House.",
-        "districtNum": 3
-         
+        "questName": "River Frontier",
+        "questDescription": "Get a scenic view of the Danube River.",
+        "districtNum": 2,
+        "coordinates": "None"
     },
     {
-        "questName": "Tour the Belvedere Palace",
-        "questDescription": "Explore the beautiful Baroque palace and its art collection.",
-        "districtNum": 3
-         
+        "questName": "The Kiss",
+        "questDescription": "Get a photo of the iconic painting, The Kiss in the Belvedere Museum.",
+        "districtNum": 3,
+        "coordinates": "48.1915° N, 16.3809° E"
     },
     {
-        "questName": "Learn about the Third Man",
-        "questDescription": "Take a tour themed around the classic film 'The Third Man'.",
-        "districtNum": 4
-         
+        "questName": "The Two Composers",
+        "questDescription": "Visit the graves of Mozart and Beethoven, located in the same cemetery.",
+        "districtNum": 3,
+        "coordinates": "48.1481° N, 16.4417° E"
     },
     {
-        "questName": "Visit the Naschmarkt",
-        "questDescription": "Stroll through Vienna's most popular market.",
-        "districtNum": 5
-         
+        "questName": "Karl's Reflection",
+        "questDescription": "Admire the reflection of Karlskirche.",
+        "districtNum": 4,
+        "coordinates": "48.1986° N, 16.3717° E"
     },
     {
-        "questName": "Explore the House of the Sea",
-        "questDescription": "Visit the aquarium and terrarium zoo in a World War II flak tower.",
-        "districtNum": 6
-         
-    },
-    {
-        "questName": "Discover the MuseumsQuartier",
-        "questDescription": "Explore the museums and cultural institutions in this vibrant area.",
-        "districtNum": 7
-         
-    },
-    {
-        "questName": "Visit the Theater in der Josefstadt",
-        "questDescription": "Enjoy a performance at Vienna's oldest theater.",
-        "districtNum": 8
-         
-    },
-    {
-        "questName": "Walk through the Sigmund Freud Museum",
-        "questDescription": "Learn about the life and work of the father of psychoanalysis.",
-        "districtNum": 9
-         
-    },
-    {
-        "questName": "Explore the Favoriten District",
-        "questDescription": "Discover the diverse culture and community of Favoriten.",
-        "districtNum": 10
-         
-    },
-    {
-        "questName": "Visit the Zentralfriedhof",
-        "questDescription": "Tour Vienna's largest cemetery, the resting place of many famous individuals.",
-        "districtNum": 11
-         
-    },
-    {
-        "questName": "Enjoy Schönbrunn Palace",
-        "questDescription": "Explore the summer residence of the Habsburgs.",
-        "districtNum": 12
-         
-    },
-    {
-        "questName": "Visit the Hietzing Zoo",
-        "questDescription": "Tour the world's oldest zoo located in Schönbrunn Palace.",
-        "districtNum": 13
-         
-    },
-    {
-        "questName": "Discover the Technical Museum",
-        "questDescription": "Explore exhibits on technology and industry in Vienna.",
-        "districtNum": 14
-         
-    },
-    {
-        "questName": "Walk through Rudolfsheim-Fünfhaus",
-        "questDescription": "Discover the historical and cultural heritage of this district.",
-        "districtNum": 15
-         
-    },
-    {
-        "questName": "Explore the Ottakring District",
-        "questDescription": "Enjoy the local cuisine and vibrant atmosphere of Ottakring.",
-        "districtNum": 16
-         
-    },
-    {
-        "questName": "Visit the Türkenschanzpark",
-        "questDescription": "Relax in this large and beautiful park.",
-        "districtNum": 17
-         
-    },
-    {
-        "questName": "Discover the Währing District",
-        "questDescription": "Explore the historical sites and local culture of Währing.",
-        "districtNum": 18
-         
-    },
-    {
-        "questName": "Tour the Döbling District",
-        "questDescription": "Visit the Heuriger wine taverns and enjoy local wines.",
-        "districtNum": 19 
-         
-    },
-    {
-        "questName": "Explore the Brigittenau District",
-        "questDescription": "Discover the cultural and historical landmarks of Brigittenau.",
-        "districtNum": 20
-         
-    },
-    {
-        "questName": "Visit the Donaupark",
-        "questDescription": "Enjoy the green spaces and scenic views of the Danube.",
-        "districtNum": 21
-    },
-    {
-        "questName": "Explore the Donau City",
-        "questDescription": "Tour the modern skyscrapers and business district.",
-        "districtNum": 22
-    },
-    {
-        "questName": "Discover the Liesing District",
-        "questDescription": "Learn about the history and community of Liesing.",
-        "districtNum": 23
+        "questName": "Karl's Square",
+        "questDescription": "Take a stroll through Karlspatz, a major transporation hub.",
+        "districtNum": 4,
+        "coordinates": "48.2002° N, 16.3709° E"
     }
 ]
