@@ -5,3 +5,4 @@
 /assets/images/emoji6.png filter=lfs diff=lfs merge=lfs -text
 /yarn.lock filter=lfs diff=lfs merge=lfs -text
 /assets/landscape-overlay.png filter=lfs diff=lfs merge=lfs -text
+/Archive.zip filter=lfs diff=lfs merge=lfs -text

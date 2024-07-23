@@ -1,16 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect ,Platform} from 'react';
+import { View, StyleSheet, Text, TouchableOpacity ,Linking,Alert} from 'react-native';
 import MapScreen from './MapScreen'; // Adjust the path as necessary
 import getDistrictFromCoordinates from '../HelperJsFiles/DistrintFinder.js';
 import useLocation from '../HelperJsFiles/locationPerms';
 import getThreeRandomQuests from '../HelperJsFiles/randomQuest';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const openInMaps = (myLat,myLong,lat, long) => {
+  const url = `http://maps.apple.com/?saddr=${myLat},${myLong}&daddr=${lat},${long}`;
+  Linking.openURL(url);
+
+   
+    
+};
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
+function isCloseToDestination(userLat, userLon, destLat, destLon, thresholdKm) {
+  const distance = haversineDistance(userLat, userLon, destLat, destLon);
+  return distance <= thresholdKm;
+}
+
 const App = () => {
+  const TooFarAway = () =>
+    Alert.alert('Looks Like you are a bit far', 'Navigate to the location first to initiate the quest.', [
+      {
+        text: 'Go Back',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Navigate', onPress: () => handleMaps()},
+    ]);
+
   const myLocation = useLocation();
-  const [bottom, setBottom] = useState(-80);// makes the drawyer work
-  const  [zIndex, setZIndex] = useState(-1); // This is to hide the quest info
-  const [isSmall, setIsSmall] = useState(false);//boolean to see if the drawer is open or not
+  const [bottom, setBottom] = useState(-80); // Makes the drawer work
+  const [zIndex, setZIndex] = useState(-1); // This is to hide the quest info
+  const [isSmall, setIsSmall] = useState(false); // Boolean to see if the drawer is open or not
   const [district, setDistrict] = useState(''); // The district name
   const [Q1, setQ1] = useState(''); // The quest name
   const [Q2, setQ2] = useState(''); // The quest name
@@ -19,8 +52,12 @@ const App = () => {
   const [Quest1Description, setQuest1Description] = useState(''); // The quest description
   const [Quest2Description, setQuest2Description] = useState(''); // The quest description
   const [Quest3Description, setQuest3Description] = useState(''); // The quest description
-
+  const [Q1Coords, setQ1Coords] = useState({ latitude: 0, longitude: 0 });
+  const [Q2Coords, setQ2Coords] = useState({ latitude: 0, longitude: 0 });
+  const [Q3Coords, setQ3Coords] = useState({ latitude: 0, longitude: 0 });
+  const [QuestCoords, setQuestCoords] = useState({ latitude: 0, longitude: 0 });
   const [QuestDescription, setQuestDescription] = useState(''); // The quest description
+
   useEffect(() => {
     const updateDistrict = async () => {
       if (myLocation.latitude && myLocation.longitude) {
@@ -33,13 +70,18 @@ const App = () => {
         setQuest1Description(quests[0].questDescription);
         setQuest2Description(quests[1].questDescription);
         setQuest3Description(quests[2].questDescription);
+        setQ1Coords({ latitude: quests[0].latitude, longitude: quests[0].longitude });
+        setQ2Coords({ latitude: quests[1].latitude, longitude: quests[1].longitude });
+        setQ3Coords({ latitude: quests[2].latitude, longitude: quests[2].longitude });
       }
     };
     updateDistrict();
   }, [myLocation]);
+
   const Xpress = () => {
     setZIndex(-1);
-  }
+  };
+
   const handlePress = () => {
     if (!isSmall) {
       setBottom(-290); // Move the rectangle up
@@ -50,26 +92,46 @@ const App = () => {
     }
     console.log('Button pressed');
   };
-
+  
+  const handleMaps = () => {
+    if (QuestCoords.latitude && QuestCoords.longitude) {
+      openInMaps(myLocation.latitude,myLocation.longitude,QuestCoords.latitude, QuestCoords.longitude);
+    }
+    console.log('Button pressed');
+  };
+  const handleStart = () => {
+    if (QuestCoords.latitude==myLocation.latitude && QuestCoords.longitude==myLocation.longitude) {
+      console.log('You are at the destination');
+    }
+    else {
+      console.log('You are not at the destination');
+      TooFarAway();
+    }
+    console.log('Button pressed');
+  };
   const Go1 = () => {
-    setQuestTitle(Q1)
+    setQuestTitle(Q1);
     setQuestDescription(Quest1Description);
     setZIndex(1);
-    
+    setQuestCoords(Q1Coords);
   };
 
   const Go2 = () => {
-    setQuest2Description(Quest2Description)
-    setQuestTitle(Q2)
+    setQuestTitle(Q2);
+    setQuestDescription(Quest2Description);
     setZIndex(1);
-  }
-
-  const Go3 = () => {
-    setQuestTitle(Q3)
-    setQuest3Description(Quest3Description)
-    setZIndex(1);
+    setQuestCoords(Q2Coords);
   };
 
+  const Go3 = () => {
+    setQuestTitle(Q3);
+    setQuestDescription(Quest3Description);
+    setQuestCoords(Q3Coords);
+    console.log(Q3Coords);
+    setZIndex(1);
+    distanceInKm = haversineDistance(myLocation.latitude, myLocation.longitude, Q3Coords.latitude, Q3Coords.longitude);
+    console.log(isCloseToDestination(distanceInKm))
+  };
   return (
     <View style={styles.container}>
       <MapScreen style={styles.map} />
@@ -119,16 +181,18 @@ const App = () => {
       {QuestDescription}
 	</Text>
 </View>
+
+<TouchableOpacity 
+  style={styles.buttonWrapper} 
+  onPress={handleStart}
+  activeOpacity={0.7} // Adjust this value as needed
+>
 <View 
+
 	style = {{
 		backgroundColor: "#FF5555",
 		borderRadius: 2,
-		paddingVertical: 10,
-		paddingHorizontal: 30,
-		marginBottom: 16,
-		marginHorizontal: 10,
-    bottom: -130,
-    marginRight: 210,
+    bottom: -450,
 	}}>
 	<Text 
 		style = {{
@@ -138,28 +202,47 @@ const App = () => {
 		{"Start"}
 	</Text>
 </View>
-<View 
-	style = {{
-		alignItems: "center",
-		backgroundColor: "#6C6C6C",
-		borderRadius: 2,
-		paddingVertical: 10,
-		paddingHorizontal: 30,
-		marginBottom: 16,
-		marginHorizontal: 10,
-    bottom: -65,
-    marginRight: -110,
-    
-	}}>
-	<Text 
-		style = {{
-			color: "#FFFFFF",
-			fontSize: 22.5,
-		}}>
-		{"Open in Maps"}
-	</Text>
-</View>
+</TouchableOpacity>
 
+
+
+
+<TouchableOpacity 
+  style={styles.buttonWrapper} 
+  onPress={handleMaps}
+  activeOpacity={0.7} // Adjust this value as needed
+>
+  
+  
+  
+  
+  
+  <View 
+    style={{
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#6C6C6C",
+      borderRadius: 2,
+      paddingVertical: 10,
+      paddingHorizontal: 30,
+      marginBottom: 16,
+      marginHorizontal: -10,
+      width: 200,
+      height: 50,
+      bottom: -435,
+      right: -200,
+    }}
+  >
+    <Text 
+      style={{
+        color: "#FFFFFF",
+        fontSize: 22.5,
+      }}
+    >
+      {"Open in Maps"}
+    </Text>
+  </View>
+</TouchableOpacity>
 
       </View>
 
