@@ -13,6 +13,7 @@ import { vienna } from '../HelperJsFiles/city';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import refreshIfFocused from '../HelperJsFiles/screenRerender';
 import { getCompletedLandmarks } from '../HelperJsFiles/completedLandmarks';
+import locations from '../HelperJsonFiles/quests.json';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
 
@@ -127,8 +128,8 @@ export function MapScreen() {
   const renderCallout = (location) => (
     <Callout onPress={() => setShowLandmarkDialog(true)}>
       <View style={styles.calloutContainer}>
-        <Text style={styles.calloutTitle}>{location.title}</Text>
-        <Text style={styles.calloutDescription}>{location.description}</Text>
+        <Text style={styles.calloutTitle}>{location.questName}</Text>
+        <Text style={styles.calloutDescription}>{location.questDescription}</Text>
         <Button 
           title="Open Quest" 
           onPress={() => setShowLandmarkDialog(true)}
@@ -138,7 +139,6 @@ export function MapScreen() {
     </Callout>
   );
 
-
   // Renders the dialog for a landmark dialog
   const renderLandmarkDialog = () => 
     (<View style={styles.landmarkDialog}>
@@ -146,8 +146,8 @@ export function MapScreen() {
         <Text>X</Text>
       </TouchableOpacity>
       <Text style={styles.landmarkTitle}>
-        {completedLandmarks[landmark.title] ? '✅ ' : '❌ '}
-        {landmark.title}
+        {completedLandmarks[landmark.questName] ? '✅ ' : '❌ '}
+        {landmark.questName}
       </Text>
       <Image 
         source={landmark.image ? {uri: landmark.image} : require('../assets/images/placeholder.jpg')}
@@ -156,16 +156,16 @@ export function MapScreen() {
       <Text>{calculateDistance(myLocation, landmark)}km from your location</Text>
       <View style={styles.objectivesContainer}>
         <Text style={styles.objectivesTitle}>Objectives</Text>
-        <Text>{landmark.description}</Text>
+        <Text>{landmark.questDescription}</Text>
       </View>
-      {completedLandmarks[landmark.title] ? (
+      {completedLandmarks[landmark.questName] ? (
         <View style={styles.completedBox}>
           <Text>Your Postcard has been saved to your photo album</Text>
         </View>
       ) : (
         <TouchableOpacity 
           style={styles.landmarkButton} 
-          onPress={() => navigation.navigate('Camera', { landmarkTitle: landmark.title })}
+          onPress={() => navigation.navigate('Camera', { landmarkTitle: landmark.questName })}
         >
           <Text>Take Postcard</Text>
         </TouchableOpacity>
@@ -224,7 +224,21 @@ export function MapScreen() {
             </Callout>
           </Marker>
         )}
-        {viennaStorage.json.landmarkLocations.map((location, index) => (
+        {locations.map((location, index) => (
+          location.latitude && location.longitude && (
+            <Marker
+              key={index}
+              coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+              title={location.questName}
+              description={location.questDescription}
+              pinColor="purple"
+              onPress={() => handleMarkerPress(location)}
+            >
+              {renderCallout(location)}
+            </Marker>
+          )
+        ))}
+               {viennaStorage.json.landmarkLocations.map((location, index) => (
           <Marker
             key={index}
             coordinate={{ latitude: location.latitude, longitude: location.longitude }}
@@ -236,6 +250,7 @@ export function MapScreen() {
             {renderCallout(location)}
           </Marker>
         ))}
+
 
         {directions && (
           <MapViewDirections
@@ -258,4 +273,4 @@ export function MapScreen() {
   );
 }
 
-export default MapScreen
+export default MapScreen;
