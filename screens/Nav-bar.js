@@ -5,6 +5,7 @@ import getDistrictFromCoordinates from '../HelperJsFiles/DistrintFinder.js';
 import useLocation from '../HelperJsFiles/locationPerms';
 import getThreeRandomQuests from '../HelperJsFiles/randomQuest';
 import Icon from 'react-native-vector-icons/Ionicons';
+import vienna from '../HelperJsFiles/city';
 
 const openInMaps = (myLat,myLong,lat, long) => {
   const url = `http://maps.apple.com/?saddr=${myLat},${myLong}&daddr=${lat},${long}`;
@@ -13,6 +14,10 @@ const openInMaps = (myLat,myLong,lat, long) => {
    
     
 };
+function percent(number) {
+  return parseFloat(((number / 69) * 100).toFixed(3));
+
+}
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Earth's radius in kilometers
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -57,12 +62,11 @@ const App = () => {
   const [Q3Coords, setQ3Coords] = useState({ latitude: 0, longitude: 0 });
   const [QuestCoords, setQuestCoords] = useState({ latitude: 0, longitude: 0 });
   const [QuestDescription, setQuestDescription] = useState(''); // The quest description
-
+  const [completed, setCompleted] = useState(0);
   useEffect(() => {
     const updateDistrict = async () => {
       if (myLocation.latitude && myLocation.longitude) {
-        const newDistrict = await getDistrictFromCoordinates(myLocation.latitude, myLocation.longitude);
-        setDistrict(newDistrict);
+
         const quests = getThreeRandomQuests();
         setQ1(quests[0].questName);
         setQ2(quests[1].questName);
@@ -99,9 +103,16 @@ const App = () => {
     }
     console.log('Button pressed');
   };
+  const handleHack = () => {
+    console.log('You are at the destination');
+    setCompleted(completed + 1);
+
+  }
   const handleStart = () => {
     if (QuestCoords.latitude==myLocation.latitude && QuestCoords.longitude==myLocation.longitude) {
       console.log('You are at the destination');
+      vienna.increaseCompletedDistricts();
+
     }
     else {
       console.log('You are not at the destination');
@@ -109,7 +120,9 @@ const App = () => {
     }
     console.log('Button pressed');
   };
+  
   const Go1 = () => {
+    quest = getThreeRandomQuests();
     setQuestTitle(Q1);
     setQuestDescription(Quest1Description);
     setZIndex(1);
@@ -136,7 +149,7 @@ const App = () => {
     <View style={styles.container}>
       <MapScreen style={styles.map} />
       <View style={styles.bubbleContainer}>
-        <Text style={styles.bubbleText}>{district}</Text>
+        <Text style={styles.bubbleText}>{percent(completed) +'% done'}</Text>
       </View>
 
       <View style={[styles.QuestInfo, { zIndex }]}>
@@ -193,17 +206,45 @@ const App = () => {
 		backgroundColor: "#FF5555",
 		borderRadius: 2,
     bottom: -450,
+    width: 100,
+    height: 60,
 	}}>
 	<Text 
 		style = {{
 			color: "#FFFFFF",
 			fontSize: 22.5,
+
 		}}>
-		{"Start"}
+		{"Mark Complete"}
 	</Text>
 </View>
 </TouchableOpacity>
 
+<TouchableOpacity 
+  style={styles.buttonWrapper} 
+  onPress={handleHack}
+  activeOpacity={0.7} // Adjust this value as needed
+>
+<View 
+
+	style = {{
+		backgroundColor: "#FF5555",
+		borderRadius: 2,
+    bottom: -100,
+    right: -120,
+    width: 100,
+    height: 60,
+	}}>
+	<Text 
+		style = {{
+			color: "#FFFFFF",
+			fontSize: 22.5,
+
+		}}>
+		{"Hack Complete"}
+	</Text>
+</View>
+</TouchableOpacity>
 
 
 

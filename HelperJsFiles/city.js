@@ -16,6 +16,10 @@ class City {
         this.generateDistricts()
     }
 
+    increaseCompletedDistricts() {
+        this.completedDistricts++
+    }
+
     getLastScreen() {
         return this.lastScreen
     }
@@ -93,14 +97,14 @@ class City {
     }
 
     calculateCompletionPercentage() {
-        const totalDistricts = 23;
-        var completedDistricts = 0;
+        const totalDistricts = 69;
+        var completedChallanges = 0;
         for (var i = 0; i < totalDistricts; i++) {
             if (this.isDistrictCompleted(i)) {
-                completedDistricts++
+                completedChallanges++
             }
         }
-        return totalDistricts ? (completedDistricts / totalDistricts) * 100 : 0;
+        return totalDistricts ? (completedChallanges / totalDistricts) * 100 : 0;
     }
 
     getShroudEnabled(index, zeroIndexed=false) {
