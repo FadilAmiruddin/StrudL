@@ -8,7 +8,7 @@ import { Text, View, TouchableOpacity, Button, SafeAreaView, Linking, Platform, 
 import MapView, { Marker, Callout } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { StatusBar } from 'expo-status-bar';
-
+import CameraScreen from './CameraScreen';
 import styles from '../HelperJsFiles/styles';
 import useLocation from '../HelperJsFiles/locationPerms';
 import ShroudContainer from '../HelperJsFiles/shroud';
@@ -195,7 +195,7 @@ export function MapScreen() {
       ) : (
         <TouchableOpacity 
           style={styles.landmarkButton} 
-          onPress={() => navigation.navigate('Camera', { landmarkTitle: landmark.questName })}
+          onPress={() => navigation.navigate(CameraScreen, { landmarkTitle: landmark.questName })}
         >
           <Text>Take Postcard</Text>
         </TouchableOpacity>

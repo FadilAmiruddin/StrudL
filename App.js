@@ -8,40 +8,44 @@ import { createDrawerNavigator } from '@react-navigation/drawer'; // Import Draw
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen.js';
 import DistrictCompletionScreen from './screens/DistrictCompletionScreen';
-import CityCompletionScreen from './screens/CityCompletionScreen';
-import QuestScreen from './screens/QuestScreen'; // Assume this screen is created
 import CameraScreen from './screens/CameraScreen';
 import PhotoConfirmationScreen from './screens/PhotoConfirmationScreen';
 import Nav from './screens/Nav-bar.js';
 import viennaStorage from './HelperJsFiles/viennaStorage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 registerRootComponent(App);
-
-// Ensure the database is ready before running the app
 viennaStorage.async.ensureDatabaseSetup();
 
-const Stack = createStackNavigator(); // Stack navigation
-const Drawer = createDrawerNavigator(); // Drawer navigation
+const Tab = createMaterialTopTabNavigator();
 
-// New Stack to handle the postcard creation process
-function CameraStack() {
+const Stack = createStackNavigator(); // Adding Stack navigation
+
+const CameraStack = createStackNavigator();
+
+
+// This is the camera manaagment stack. 
+// When called, it contains the information for the camera screen and the photo confirmation screen.
+function CameraStackScreen() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Camera"
-        component={CameraScreen}
-        options={{
+    <CameraStack.Navigator>
+      <CameraStack.Screen 
+        name="Camera" 
+        component={CameraScreen} 
+        options={{ 
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="PhotoConfirmation"
+      <CameraStack.Screen 
+        name="PhotoConfirmation" 
         component={PhotoConfirmationScreen}
       />
-    </Stack.Navigator>
+    </CameraStack.Navigator>
   );
 }
+
+
 
 export default function App() {
   const [forceRenderValue, forceRenderFunction] = useState(0);
@@ -49,7 +53,6 @@ export default function App() {
   const mapScreenRef = useRef(null); // these refs are unused for now, but eventually they will be involved in forcing renders
   const districtCompletionScreenRef = useRef(null);
   const cityCompletionScreenRef = useRef(null);
-  const questCompletionScreenRef = useRef(null);
 
   const forceRender = () => {
     if (forceRenderValue + 1 === Number.MAX_VALUE) {
@@ -59,30 +62,43 @@ export default function App() {
     }
   };
 //code for screens. to switch from map and camara.
+  
+return (
+  <GestureHandlerRootView style={{ flex: 1 }}>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="MainTabs" 
+          component={MainTabNavigator} 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="CameraStack" 
+          component={CameraStackScreen} 
+          options={{ headerShown: false }} // Removes header off of the camera
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </GestureHandlerRootView>
+);
+
+function MainTabNavigator(){
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Drawer.Navigator
-          screenOptions={{
-            drawerType: 'slide', // Slide the drawer in from the side
-            drawerPosition: 'left', // Drawer position (left or right)
-            headerShown: false, // Hide the header
-            drawerActiveTintColor: '#e91e63', // Active item text color
-            drawerLabelStyle: { fontWeight: 'bold' }, // Label styles
-          }}
-        >
-          <Drawer.Screen name="Map" component={Nav} />
-          <Drawer.Screen
-            name="Camera"
-            component={CameraStack}
-            options={{
-              drawerLabel: 'Camera', // Label for the screen
-              drawerIcon: () => null, // Optionally add icons here
-            }}
-          />
-         
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </GestureHandlerRootView>
-  );
+    <Tab.Navigator
+        screenOptions={{
+          //tabBarScrollEnabled: true,
+          tabBarShowIcon: true,
+          tabBarItemStyle: { justifyContent: 'center', alignItems: 'center' },
+          tabBarLabelStyle: { textAlign: 'center', paddingVertical: 5 }, // Add paddingVertical to center the text better
+        }}
+      >
+        <Tab.Screen name="Home" ref={homeScreenRef} component={HomeScreen} />
+        <Tab.Screen name="Map" ref={mapScreenRef} component={MapScreen} />
+        <Tab.Screen name="District" ref={districtCompletionScreenRef} component={DistrictCompletionScreen} />
+        <Tab.Screen name="ProtoTypeMap" component={Nav} />
+        
+      </Tab.Navigator>
+  )
 }
+}
+
