@@ -7,6 +7,9 @@ import getThreeRandomQuests from '../HelperJsFiles/randomQuest';
 import Icon from 'react-native-vector-icons/Ionicons';
 import vienna from '../HelperJsFiles/city';
 
+/*
+Opens the latitude and longitude given in Apple maps
+*/
 const openInMaps = (myLat,myLong,lat, long) => {
   const url = `http://maps.apple.com/?saddr=${myLat},${myLong}&daddr=${lat},${long}`;
   Linking.openURL(url);
@@ -14,10 +17,17 @@ const openInMaps = (myLat,myLong,lat, long) => {
    
     
 };
+/*
+Returns a percentage for a number
+*/
 function percent(number) {
   return parseFloat(((number / 69) * 100).toFixed(3));
 
 }
+
+/*
+Determines the distance between two points (latitude and longitude) using the haversine formula
+*/
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Earth's radius in kilometers
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -29,11 +39,18 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   const distance = R * c; // Distance in kilometers
   return distance;
 }
+
+/*
+Uses the previous distance function to determine if the user is close to a given point.
+*/
 function isCloseToDestination(userLat, userLon, destLat, destLon, thresholdKm) {
   const distance = haversineDistance(userLat, userLon, destLat, destLon);
   return distance <= thresholdKm;
 }
 
+/*
+Brings up a pop up to alert the user if they are close or far to a destination.
+*/
 const App = () => {
   const TooFarAway = () =>
     Alert.alert('Looks Like you are a bit far', 'Navigate to the location first to initiate the quest.', [
@@ -86,6 +103,9 @@ const App = () => {
     setZIndex(-1);
   };
 
+  /**
+   * Code for the drawer display on the screen, to move it up and down.
+   */
   const handlePress = () => {
     if (!isSmall) {
       setBottom(-290); // Move the rectangle up
@@ -351,7 +371,7 @@ const styles = StyleSheet.create({
   },
   bubbleContainer: {
     position: 'absolute',
-    top: 10,
+    top: 40,
     left: 100,
     height: 50,
     width: 200,

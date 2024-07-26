@@ -46,7 +46,7 @@ function CameraStack() {
 export default function App() {
   const [forceRenderValue, forceRenderFunction] = useState(0);
   const homeScreenRef = useRef(null); // these refs are unused for now, but eventually they will be involved in forcing renders
-  const mapScreenRef = useRef(null);
+  const mapScreenRef = useRef(null); // these refs are unused for now, but eventually they will be involved in forcing renders
   const districtCompletionScreenRef = useRef(null);
   const cityCompletionScreenRef = useRef(null);
   const questCompletionScreenRef = useRef(null);
@@ -58,7 +58,7 @@ export default function App() {
       forceRenderFunction(forceRenderValue + 1);
     }
   };
-
+//code for screens. to switch from map and camara.
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
@@ -76,7 +76,7 @@ export default function App() {
             name="Camera"
             component={CameraStack}
             options={{
-              drawerLabel: 'Camera',
+              drawerLabel: 'Camera', // Label for the screen
               drawerIcon: () => null, // Optionally add icons here
             }}
           />

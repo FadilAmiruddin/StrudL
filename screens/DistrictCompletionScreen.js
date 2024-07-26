@@ -1,8 +1,16 @@
+/**
+ * Not being used. primarly for testing purposes. 
+ * This file is the DistrictCompletionScreen component. It is a screen that displays a list of districts and their quests.x
+ */
+
 import React, { useEffect, useRef, useState } from 'react';
+
 import { View, Text, ScrollView, StyleSheet, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../HelperJsFiles/styles.js';
 import { vienna } from '../HelperJsFiles/city.js'
+
+
 import { useIsFocused } from '@react-navigation/native';
 import refreshIfFocused from '../HelperJsFiles/screenRerender.js';
 

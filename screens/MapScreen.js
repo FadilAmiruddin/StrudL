@@ -1,3 +1,8 @@
+
+/**
+ * This file is the MapScreen compnent. it is used in Nav-Bar to display the map of Vienna and the locations of the quests. 
+ */
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, Button, SafeAreaView, Linking, Platform, Image } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
@@ -15,23 +20,32 @@ import refreshIfFocused from '../HelperJsFiles/screenRerender';
 import { getCompletedLandmarks } from '../HelperJsFiles/completedLandmarks';
 import locations from '../HelperJsonFiles/quests.json';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg'; // API Key
 
 export const MAP_SCREEN_ID = "MapScreen"
 
+/**
+ * Represents the MapScreen component.
+ * This component displays a map with markers for various locations.
+ * Users can view their current location, get directions to a specific location, and interact with landmarks on the map.
+ */
 export function MapScreen() {
-  const isFocused = useIsFocused()
-  const [forceRenderValue, forceRenderFunction] = useState(0);
-  const [directions, setDirectionsState] = useState(null);
-  const myLocation = useLocation();
-  const shroudContainerRef = useRef(null);
-  const mapViewRef = useRef(null);
+  /**
+   * Making react hooks for the map screen.
+   * 
+   */
+  const isFocused = useIsFocused()  // checks if the screen is focused
+  const [forceRenderValue, forceRenderFunction] = useState(0); // force render value
+  const [directions, setDirectionsState] = useState(null);// directions for the map
+  const myLocation = useLocation();// location of the user. it is set by locationPerms.js
+  const shroudContainerRef = useRef(null); // shroud container for the map
+  const mapViewRef = useRef(null); // map view reference
   // states for the landmark locations and its pop-up menu
-  const [landmark, setLandmark] = useState(null);
-  const [showLandmarkDialog, setShowLandmarkDialog] = useState(false);
-  const [completedLandmarks, setCompletedLandmarks] = useState({});
+  const [landmark, setLandmark] = useState(null);// landmark location
+  const [showLandmarkDialog, setShowLandmarkDialog] = useState(false);// landmark pop-up menu
+  const [completedLandmarks, setCompletedLandmarks] = useState({}); // completed landmarks
 
-  const navigation = useNavigation();
+  const navigation = useNavigation();// navigation for the map screen
 
   const forceRender = () => {
     if (forceRenderValue + 1 == Number.MAX_VALUE) {
@@ -42,6 +56,17 @@ export function MapScreen() {
 
   refreshIfFocused(isFocused, MAP_SCREEN_ID, forceRender)
 
+  /**
+   * Updates the directions state with the given origin and destination coordinates.
+   *
+   * @param {Object} origin - The origin coordinates.
+   * @param {number} origin.latitude - The latitude of the origin.
+   * @param {number} origin.longitude - The longitude of the origin.
+   * @param {Object} destination - The destination coordinates.
+   * @param {number} destination.latitude - The latitude of the destination.
+   * @param {number} destination.longitude - The longitude of the destination.
+   * @returns {void}
+   */
   const updateDirections = (origin, destination) => {
     if (origin.latitude && origin.longitude) {
       setDirectionsState({
@@ -51,17 +76,21 @@ export function MapScreen() {
     }
   };
 
-  // effect to update the completed landmarks list
+  // effect to update the completed landmarks list. it uses react hooks to update the list. 
   useFocusEffect(
     React.useCallback(() => {
       const fetchCompletedLandmarks = async () => {
-        const completed = await getCompletedLandmarks();
+        const completed = await getCompletedLandmarks(); // gets the completed landmarks 
         setCompletedLandmarks(completed);
       };
       fetchCompletedLandmarks();
     }, [])
   );
-
+/**
+ * useEffect to update the directions and the completed landmarks list.
+ * it is used to update the directions and the completed landmarks list.
+ * 
+ */
   useEffect(() => {
     if (myLocation.latitude && myLocation.longitude) {
       updateDirections(myLocation, { latitude: 48.2081743, longitude: 16.3738189 }); // Default to St. Stephen's Cathedral, Vienna
@@ -85,7 +114,7 @@ export function MapScreen() {
       console.error('Current location is not available');
     }
   };
-
+// function that opens either google or apple maps based on the platform
   const openDirections = (destination) => {
     if (Platform.OS === 'ios') {
       const url = `http://maps.apple.com/?saddr=${myLocation.latitude},${myLocation.longitude}&daddr=${destination.latitude},${destination.longitude}`;
@@ -95,12 +124,13 @@ export function MapScreen() {
     }
   };
 
+  // Handler for when the region changes, resets the map to Vienna if the user scrolls too far away
   const handleRegionChangeComplete = (newRegion) => {
     if (!isViennaInView(newRegion)) {
       resetToVienna();
     }
   };
-
+// function to check if vienna is in view
   const isViennaInView = (region) => {
     const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
     const viennaLatitude = 48.2081743;
