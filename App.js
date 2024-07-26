@@ -94,7 +94,6 @@ function MainTabNavigator(){
       >
         <Tab.Screen name="Home" ref={homeScreenRef} component={HomeScreen} />
         <Tab.Screen name="Map"  component={Nav} />
-        <Tab.Screen name="ProtoTypeMap" component={Nav} />
         
       </Tab.Navigator>
   )
