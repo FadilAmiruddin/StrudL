@@ -1,0 +1,243 @@
+[
+  {
+      "title": "St. Stephen's Cathedral",
+      "description": "District 1: A historic cathedral in Vienna",
+      "latitude": 48.2081743,
+      "longitude": 16.3738189,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/8/85/Wien_-_Stephansdom_%282%29.JPG",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Prater and the Giant Ferris Wheel",
+      "description": "District 2: A large public park with an amusement area and the historic Ferris wheel",
+      "latitude": 48.2169,
+      "longitude": 16.3964,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/30/Wien_Riesenrad.jpg",
+      "completed": true,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Belvedere Palace",
+      "description": "District 3: A historic palace complex",
+      "latitude": 48.191429,
+      "longitude": 16.380812,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Wien_-_Unteres_Belvedere.JPG/600px-Wien_-_Unteres_Belvedere.JPG",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Karlskirche",
+      "description": "District 4: A stunning baroque church with a distinctive dome",
+      "latitude": 48.198018,
+      "longitude": 16.370324,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Margaretenhof",
+      "description": "District 5: An iconic residential building with historic architecture",
+      "latitude": 48.188526,
+      "longitude": 16.355885,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Haus des Meeres",
+      "description": "District 6: A vertical aquarium with a plethora of aquatic life",
+      "latitude": 48.19775,
+      "longitude": 16.35293,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "MuseumsQuartier",
+      "description": "District 7: A large complex housing several museums and cultural institutions",
+      "latitude": 48.202805,
+      "longitude": 16.359353,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Theater in der Josefstadt",
+      "description": "District 8: One of Vienna's oldest theaters",
+      "latitude": 48.209045,
+      "longitude": 16.349561,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Sigmund Freud Museum",
+      "description": "District 9: The former home and office of Sigmund Freud",
+      "latitude": 48.216008,
+      "longitude": 16.359891,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Wienerberg",
+      "description": "District 10: A recreational area with ponds and modern architecture",
+      "latitude": 48.1663,
+      "longitude": 16.3472,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Central Cemetery",
+      "description": "District 11: One of the largest cemeteries in Europe, with notable gravesites",
+      "latitude": 48.1533,
+      "longitude": 16.4427,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Schönbrunner Bad",
+      "description": "District 12: A historic public swimming pool near Schönbrunn Palace",
+      "latitude": 48.184985,
+      "longitude": 16.320703,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Schönbrunn Palace",
+      "description": "District 13: A former imperial summer residence",
+      "latitude": 48.185711,
+      "longitude": 16.312222,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Steinhof Church",
+      "description": "District 14: An Art Nouveau church designed by Otto Wagner",
+      "latitude": 48.213845,
+      "longitude": 16.283462,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Westbahnhof",
+      "description": "District 15: A major railway station and transport hub",
+      "latitude": 48.196944,
+      "longitude": 16.3375,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Ottakringer Brewery",
+      "description": "District 16: A historic brewery producing Vienna's famous beer",
+      "latitude": 48.217544,
+      "longitude": 16.324937,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Kalvarienberg Church",
+      "description": "District 17: A baroque church known for its beautiful frescoes",
+      "latitude": 48.230393,
+      "longitude": 16.331259,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Türkenschanzpark",
+      "description": "District 18: A large park with diverse plant species and historical significance",
+      "latitude": 48.234865,
+      "longitude": 16.323572,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Kahlenberg",
+      "description": "District 19: A hill offering panoramic views of Vienna and the surrounding area",
+      "latitude": 48.268456,
+      "longitude": 16.329042,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Millennium Tower",
+      "description": "District 20: One of the tallest buildings in Austria with a shopping center",
+      "latitude": 48.23495,
+      "longitude": 16.391799,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Danube Island",
+      "description": "District 21: A long, narrow island used for recreation and events",
+      "latitude": 48.239746,
+      "longitude": 16.406014,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Danube Tower",
+      "description": "District 22: A tall observation tower with a revolving restaurant",
+      "latitude": 48.241108,
+      "longitude": 16.413615,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+  {
+      "title": "Rothneusiedler Schlosspark",
+      "description": "District 23: A beautiful park with historical significance and scenic beauty",
+      "latitude": 48.1333,
+      "longitude": 16.3500,
+      "image": "",
+      "completed": false,
+      "postcard_overlay_portrait": "",
+      "postcard_overlay_landscape": ""
+  },
+
+  {
+    "title": "?????",
+    "description": "ℸ⍑ᒷᓵᔑℸ╎ᓭ𝙹⚍ℸ𝙹⎓ℸ⍑ᒷʖᔑ⊣",
+    "latitude": 60.705916,
+    "longitude": -135.078557,
+    "postcard_overlay_portrait": "",
+    "postcard_overlay_landscape": ""
+  }
+]
+
+

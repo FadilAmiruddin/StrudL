@@ -1,14 +1,18 @@
 import { vienna } from './HelperJsFiles/city.js'; // ensures this gets loaded first
 import React, { useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { registerRootComponent } from 'expo';
 import 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
+import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen.js';
 import DistrictCompletionScreen from './screens/DistrictCompletionScreen';
 import CityCompletionScreen from './screens/CityCompletionScreen';
-import QuestScreen from './screens/QuestScreen';
-import Nav from './screens/Nav-bar';
+import QuestScreen from './screens/QuestScreen';  // Assume this screen is created
+import CameraScreen from './screens/CameraScreen';
+import PhotoConfirmationScreen from './screens/PhotoConfirmationScreen';
+import Nav from './screens/Nav-bar.js'
+
 import viennaStorage from './HelperJsFiles/viennaStorage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -19,6 +23,26 @@ registerRootComponent(App);
 viennaStorage.async.ensureDatabaseSetup();
 
 const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator(); // Adding Stack navigation
+
+// New Stack to handle the postcard creation process
+function CameraStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Camera" 
+        component={CameraScreen} 
+        options={{ 
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name="PhotoConfirmation" 
+        component={PhotoConfirmationScreen}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   const [forceRenderValue, forceRenderFunction] = useState(0);
@@ -53,6 +77,16 @@ export default function App() {
           <Tab.Screen name="City" ref={cityCompletionScreenRef} component={CityCompletionScreen} />
           <Tab.Screen name="Quest" ref={questCompletionScreenRef} component={QuestScreen} />
           <Tab.Screen name="ProtoTypeMap" component={Nav} />
+          <Tab.Screen name="Camera" // Adds new tab containing the camera 
+          component={CameraStack} 
+          options = 
+          {
+            {
+              tabBarButton: () => null,
+              headerShown: false,
+              tabBarStyle: { display: 'none'}
+            }
+          }/>
         </Tab.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
