@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Quests</title>
+</head>
+<body>
+    <h1>Quests</h1>
+    <div id="quests"></div>
+
+    <script type="module">
+        import District from './District.js'; // Ensure this path is correct
+
+        // Function to display quests in the browser
+        async function displayQuests() {
+            try {
+                // Create a District 1 object
+                const district1 = new District('District 1', 1);
+                const district2 = new District('District 2', 2);
+
+                // Wait for the quests to load
+                await district1.loadQuests('../HelperJsonFiles/quests.json');
+
+                const quests = district1.getQuests();
+                quests.push(... district2.getQuests());
+                const questsDiv = document.getElementById('quests');
+                questsDiv.innerHTML = ''; // Clear previous content
+
+                quests.forEach(quest => {
+                    const questDiv = document.createElement('div');
+                    questDiv.textContent = `Quest Name: ${quest.getQuestName()}, Description: ${quest.getQuestDescription()}, District: ${quest.getDistrictNum()}`;
+                    questsDiv.appendChild(questDiv);
+                });
+            } catch (error) {
+                console.error('Error displaying quests:', error);
+            }
+        }
+
+        // Call the displayQuests function when the page loads
+        window.onload = displayQuests;
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+[
+    {
+        "name" : "Innere Stadt"
+    },
+    {
+        "name" : "Leopoldstadt"
+    },
+    {
+        "name" : "Landstraße"
+    },
+    {
+        "name" : "Wieden"
+    },
+    {
+        "name" : "Margareten"
+    },
+    {
+        "name" : "Mariahilf"
+    },
+    {
+        "name" : "Neubau"
+    },
+    {
+        "name" : "Josefstadt"
+    },
+    {
+        "name" : "Alsergrund"
+    },
+    {
+        "name" : "Favoriten"
+    },
+    {
+        "name" : "Simmering"
+    },
+    {
+        "name" : "Meidling"
+    },
+    {
+        "name" : "Hietzing"
+    },
+    {
+        "name" : "Penzing"
+    },
+    {
+        "name" : "Rudolfsheim-Fünfhaus"
+    },
+    {
+        "name" : "Ottakring"
+    },
+    {
+        "name" : "Hernals"
+    },
+    {
+        "name" : "Währing"
+    },
+    {
+        "name" : "Döbling"
+    },
+    {
+        "name" : "Brigittenau"
+    },
+    {
+        "name" : "Floridsdorf"
+    },
+    {
+        "name" : "Donaustadt"
+    },
+    {
+        "name" : "Liesing"
+    }
+]

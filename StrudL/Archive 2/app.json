@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "StrudL",
+    "slug": "StrudL",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take photos of landmarks.",
+        "NSPhotoLibraryUsageDescription": "Allow StrudL to access your photos.",
+        "NSPhotoLibraryAddUsageDescription": "Allow StrudL to save photos."
+      },
+      "bundleIdentifier": "com.anonymous.StrudL"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAlZW0NrFKmUOazzCx8RUfJqReZ-GB_7xg"
+        }
+      },
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow StrudL to access your camera."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow StrudL to access your photos.",
+          "savePhotosPermission": "Allow StrudL to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ]
+  }
+}

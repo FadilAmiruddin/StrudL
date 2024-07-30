@@ -12,3 +12,16 @@
 /Archive/assets/images/emoji6.png filter=lfs diff=lfs merge=lfs -text
 /Archive/package-lock.json filter=lfs diff=lfs merge=lfs -text
 /Archive/yarn.lock filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/assets/images/background-image.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/assets/images/emoji2.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/assets/images/emoji5.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/assets/images/emoji6.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/package-lock.json filter=lfs diff=lfs merge=lfs -text
+/StrudL/Archive[[:space:]]2/yarn.lock filter=lfs diff=lfs merge=lfs -text
+/StrudL/assets/images/background-image.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/assets/images/emoji2.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/assets/images/emoji5.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/assets/images/emoji6.png filter=lfs diff=lfs merge=lfs -text
+/StrudL/compressed_node_mods.zip filter=lfs diff=lfs merge=lfs -text
+/StrudL/package-lock.json filter=lfs diff=lfs merge=lfs -text
+/StrudL/yarn.lock filter=lfs diff=lfs merge=lfs -text

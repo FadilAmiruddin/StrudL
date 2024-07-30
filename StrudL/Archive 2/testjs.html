@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District Quests</title>
+</head>
+<body>
+    <script type="module">
+        import District from './HelperJsFiles/District.js'; // Adjust path if necessary
+
+        const district = new District('District 1', 1);
+
+        // Wait a bit for quests to load and then log them
+        setTimeout(() => {
+            console.log(district.getQuests());
+        }, 1000); // Adjust timeout as needed
+    </script>
+</body>
+</html>
